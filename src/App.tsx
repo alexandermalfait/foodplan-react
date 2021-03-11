@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
-import {AppBar, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Container, Toolbar, Typography} from "@material-ui/core";
+import {Planner} from "./planner/Planner";
+
 
 function App() {
-  return (
+  return (<>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">
@@ -11,6 +13,11 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
+
+      <Container maxWidth="sm">
+          <Planner />
+      </Container>
+      </>
   );
 }
 

@@ -1,0 +1,26 @@
+.planner-date {
+    display: flex;
+    min-height: 50px;
+    margin: 1em 0;
+
+    &.today {
+        background: beige;
+    }
+
+    .date {
+        padding: .5em;
+        width: 15%;
+        background: azure;
+        text-align: center;
+
+        .day-of-week {
+            font-weight: bold;
+        }
+
+        .full-date {
+            font-size: .7em;
+        }
+    }
+
+}
+
