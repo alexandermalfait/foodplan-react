@@ -13,7 +13,7 @@ export function PlannerDate({ day } : Props) {
     }
 
     return <>
-        <Card className={`planner-date ${isToday() ? "today" : ""}`}>
+        <Card className="planner-date" raised={isToday()}>
             <div className="date">
                 <div className={"day-of-week"}>
                     {day.format("ddd")}
