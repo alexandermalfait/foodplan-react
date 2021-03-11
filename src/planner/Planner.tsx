@@ -31,7 +31,7 @@ export const Planner: FC = () => {
 
     return <>
         <Box py={3}>
-            {getWeek().map(day => <PlannerDate day={day}/>)}
+            {getWeek().map(day => <PlannerDate day={day} key={day.toString()}/>)}
         </Box>
 
         <Box display="flex" justifyContent="space-between">
