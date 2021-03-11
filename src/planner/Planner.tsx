@@ -1,24 +1,15 @@
 import React, {FC, useState} from "react";
 import {Box, Button} from "@material-ui/core";
 import {PlannerDate} from "./PlannerDate";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import {SkipNext, SkipPrevious, Today} from "@material-ui/icons";
+import {Week} from "./Week";
 
 export const Planner: FC = () => {
     const [currentMonday, setCurrentMonday] = useState(moment().day(1))
 
-    function getWeek() {
-        const weekDays = []
-
-        let day = currentMonday.clone()
-        let sunday = currentMonday.clone().day(7)
-
-        while(day <= sunday) {
-            weekDays.push(day.clone())
-            day = day.add(1, "day")
-        }
-
-        return weekDays;
+    function getWeekDates(): Moment[] {
+        return new Week(currentMonday).getDates()
     }
 
     function setToday() {
@@ -31,7 +22,7 @@ export const Planner: FC = () => {
 
     return <>
         <Box py={3}>
-            {getWeek().map(day => <PlannerDate day={day} key={day.toString()}/>)}
+            {getWeekDates().map(day => <PlannerDate day={day} key={day.toString()}/>)}
         </Box>
 
         <Box display="flex" justifyContent="space-between">
