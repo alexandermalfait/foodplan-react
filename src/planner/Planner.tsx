@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Button} from "@material-ui/core";
 import {PlannerDate} from "./PlannerDate";
 import moment, {Moment} from "moment";
@@ -21,6 +21,11 @@ export function Planner() {
         setCurrentMonday(currentMonday.clone().add(delta, 'week'));
     }
 
+    function loadPlanning() {
+
+    }
+
+    useEffect(loadPlanning, [currentMonday])
 
     return <>
         <AppScreen>
