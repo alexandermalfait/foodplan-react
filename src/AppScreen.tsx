@@ -5,7 +5,7 @@ import React from "react";
 
 
 interface Props {
-
+    title?: string
 }
 
 export const AppScreen:React.FC<Props> = (props) => {
@@ -14,7 +14,7 @@ export const AppScreen:React.FC<Props> = (props) => {
         <AppBar position="static" className="app-bar">
             <Toolbar>
                 <Typography variant="h6">
-                    And the dinner is...
+                    {props.title ?? "And the dinner is..."}
                 </Typography>
 
                 <Link to="/">
@@ -31,7 +31,7 @@ export const AppScreen:React.FC<Props> = (props) => {
             </Toolbar>
         </AppBar>
 
-        <Container maxWidth="sm">
+        <Container maxWidth="md" style={{margin: "2em auto"}}>
             <>{props.children}</>
         </Container>
     </>
