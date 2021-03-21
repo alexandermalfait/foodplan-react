@@ -12,8 +12,8 @@ export const AppScreen:React.FC<Props> = (props) => {
 
     return <>
         <AppBar position="static" className="app-bar">
-            <Toolbar>
-                <Typography variant="h6">
+            <Toolbar className="toolbar">
+                <Typography variant="h1">
                     {props.title ?? "And the dinner is..."}
                 </Typography>
 
