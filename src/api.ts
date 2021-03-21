@@ -1,6 +1,6 @@
 import * as rm from 'typed-rest-client/RestClient'
 
-interface Photo {
+export interface Photo {
     albumId: number,
     id: number,
     title: string,
@@ -11,5 +11,7 @@ interface Photo {
 const restClient = new rm.RestClient("foodplan", "https://jsonplaceholder.typicode.com")
 
 export function fetchPhotos(): Promise<Array<Photo>> {
-    return restClient.get<Array<Photo>>("photos").then(res => res.result!.slice(0, 50))
+    return restClient.get<Array<Photo>>("photos").then(res =>
+        res.result!.slice(0, 50)
+    )
 }

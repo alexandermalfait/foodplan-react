@@ -4,19 +4,16 @@ import {Card, CardHeader, CardMedia, Fab, Grid} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import {fetchPhotos} from "../api";
 import {useQuery} from "react-query";
+import {QueryStatus} from "../common/QueryStatus";
 
 export function DishList() {
     const history = useHistory()
     const {path} = useRouteMatch();
 
-    const { isLoading, isError, data } = useQuery("photos", fetchPhotos)
+    const query = useQuery("photos", fetchPhotos)
 
-    if (isLoading) {
-        return <span>Loading</span>
-    }
-
-    if(isError) {
-        return <span>Error!!</span>
+    if (query.isLoading || query.isError) {
+        return <QueryStatus query={query} />
     }
 
     return <>
@@ -26,7 +23,7 @@ export function DishList() {
         </Fab>
 
         <Grid container spacing={3}>
-            {data!.map(photo => {
+            {(query.data)!.map(photo => {
                 const dish = { name: photo.title, imageUrl: photo.thumbnailUrl }
 
                 return <Grid item xs={12} md={6} lg={4} key={dish.name}>
