@@ -1,6 +1,7 @@
 import {AppScreen} from "../AppScreen";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import {DishList} from "./DishList";
+import {NewDish} from "./NewDish";
 
 
 export default function Dishes() {
@@ -14,7 +15,7 @@ export default function Dishes() {
                 </Route>
 
                 <Route exact path={`${path}/new`}>
-                    <h1>New dish</h1>
+                    <NewDish />
                 </Route>
             </Switch>
         </AppScreen>

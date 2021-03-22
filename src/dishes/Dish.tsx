@@ -1,4 +1,7 @@
 export interface Dish {
-    name: string,
-    imageUrl: string
+    name: string
+
+    url?: string
+
+    imageUrl?: string
 }

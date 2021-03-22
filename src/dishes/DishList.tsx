@@ -24,7 +24,7 @@ export function DishList() {
 
         <Grid container spacing={3}>
             {(query.data)!.map(photo => {
-                const dish = { name: photo.title, imageUrl: photo.thumbnailUrl }
+                const dish = { name: photo.title, imageUrl: photo.thumbnailUrl, url: undefined }
 
                 return <Grid item xs={12} md={6} lg={4} key={dish.name}>
                         {DishCard(dish)}
