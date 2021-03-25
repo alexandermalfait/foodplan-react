@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => createStyles({
 
     title: {
         fontSize: "2em",
-        marginBottom: ".5em"
+        marginBottom: ".5em",
+        textAlign: "center",
     }
 }))
 
