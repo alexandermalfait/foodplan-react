@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import {signInWithGoogle} from "../services/Firebase";
 import {AppScreen} from "../AppScreen";
 import {Box, Button, createStyles, makeStyles} from "@material-ui/core";
 import {FormWrapper} from "../common/FormWrapper";
-import {useHistory} from "react-router-dom";
+import {Redirect} from "react-router-dom";
+import {AuthContext} from "../services/Auth";
 
 const useStyles = makeStyles(createStyles({
     buttons: {
@@ -21,20 +22,20 @@ const useStyles = makeStyles(createStyles({
 export default function Login() {
     const classes = useStyles()
 
-    const history = useHistory();
+    const currentUser = useContext(AuthContext)
 
-    const doSignInWithGoogle = () => {
-        signInWithGoogle().then(() => history.push("/"))
+    if (currentUser) {
+        return <><Redirect to={"/"} /></>
     }
 
     return (
         <AppScreen>
             <FormWrapper title={"Login"}>
                 <Box className={classes.buttons}>
-                    <Button onClick={doSignInWithGoogle} variant="outlined">
-                        <img src="https://img.icons8.com/ios-filled/50/000000/google-logo.png" alt="Google"/>
+                    <Button onClick={signInWithGoogle} variant="outlined">
+                        <img src="https://img.icons8.com/cute-clipart/64/000000/google-logo.png" alt="Google"/>
 
-                        Continue with google
+                        Sign in with google
                     </Button>
                 </Box>
             </FormWrapper>

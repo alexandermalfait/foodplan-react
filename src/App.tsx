@@ -6,6 +6,7 @@ import Dishes from "./dishes/Dishes";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {AuthProvider} from "./services/Auth";
 import Login from "./login/Login";
+import PrivateRoute from "./login/PrivateRoute";
 
 const queryClient = new QueryClient()
 
@@ -15,9 +16,9 @@ function App() {
             <QueryClientProvider client={queryClient}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/" component={Planner}/>
+                        <PrivateRoute exact path="/" component={Planner}/>
 
-                        <Route path="/dishes" component={Dishes}/>
+                        <PrivateRoute path="/dishes" component={Dishes}/>
 
                         <Route path="/login" component={Login}/>
                     </Switch>
