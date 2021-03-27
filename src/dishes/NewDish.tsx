@@ -5,7 +5,7 @@ import {Link, useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {FormWrapper} from "../common/FormWrapper";
 import {AuthContext} from "../services/Auth";
-import {db} from "../services/Db";
+import {addDish} from "../services/Db";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -63,9 +63,7 @@ export function NewDish() {
     const history = useHistory()
 
     const saveDish = (dish:Dish) => {
-        dish.uid = currentUser!.uid
-
-        db.collection("dishes").add(dish)
+        addDish(dish, currentUser!)
 
         history.push("/dishes")
     };
