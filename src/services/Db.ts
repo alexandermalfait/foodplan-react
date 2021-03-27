@@ -20,11 +20,17 @@ export function snapshotDishes(callback:(dishes: Array<Dish>) => void): () => vo
     return db
         .collection("dishes")
         .onSnapshot({
-            next: snapshot => callback(snapshot.docs.map(d => {
-                const dish = d.data() as Dish
-                dish.id = d.id
-                return dish;
-            })),
+            next: snapshot => {
+                const dishes = snapshot.docs
+                    .map(d => {
+                        const dish = d.data() as Dish
+                        dish.id = d.id
+                        return dish;
+                    })
+                    .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+
+                return callback(dishes);
+            },
             error: () => alert("error")
         })
 }
