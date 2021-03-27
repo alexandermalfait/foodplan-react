@@ -1,6 +1,7 @@
 import firebaseApp from "./Firebase";
 import {Dish} from "../dishes/Dish";
 import firebase from "firebase";
+import {sortBy} from "sort-by-typescript";
 
 export const db = firebaseApp.firestore()
 
@@ -27,7 +28,7 @@ export function snapshotDishes(callback:(dishes: Array<Dish>) => void): () => vo
                         dish.id = d.id
                         return dish;
                     })
-                    .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+                    .sort(sortBy("name^")); // case insensitive
 
                 return callback(dishes);
             },

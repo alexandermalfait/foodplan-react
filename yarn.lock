@@ -11101,6 +11101,11 @@ sockjs@^0.3.21:
     uuid "^3.4.0"
     websocket-driver "^0.7.4"
 
+sort-by-typescript@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/sort-by-typescript/-/sort-by-typescript-1.1.0.tgz#7d64db82a642138010d238d749a3213d624da622"
+  integrity sha512-/w4QBFKn/279iOQ1MHT2NUCRZ791aqSljcpNSMg2Tq5iLqxS1vUApr76P6kmF/cHuUgUcyrErmOTt3P6TdDjyA==
+
 sort-keys@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-1.1.2.tgz#441b6d4d346798f1b4e49e8920adfba0e543f9ad"
