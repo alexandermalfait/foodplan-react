@@ -1,9 +1,11 @@
 import {Button, createStyles, Grid, makeStyles, TextField} from "@material-ui/core";
-import React from "react";
+import React, {useContext} from "react";
 import {useForm} from "react-hook-form";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {FormWrapper} from "../common/FormWrapper";
+import {AuthContext} from "../services/Auth";
+import {db} from "../services/Db";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -14,12 +16,10 @@ const useStyles = makeStyles(() => createStyles(({
     }
 })))
 
-function DishForm() {
+function DishForm({onSubmit} : {onSubmit: (dish:Dish) => void}) {
     const {register, handleSubmit} = useForm()
 
     const classes = useStyles()
-
-    const onSubmit = (dish: Dish) => console.log(dish)
 
     return <>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -58,9 +58,20 @@ function DishForm() {
 }
 
 export function NewDish() {
+    const currentUser = useContext(AuthContext);
+
+    const history = useHistory()
+
+    const saveDish = (dish:Dish) => {
+        dish.uid = currentUser!.uid
+
+        db.collection("dishes").add(dish)
+
+        history.push("/dishes")
+    };
     return <>
         <FormWrapper title="New Dish">
-            <DishForm/>
+            <DishForm onSubmit={saveDish}/>
         </FormWrapper>
     </>;
 }
