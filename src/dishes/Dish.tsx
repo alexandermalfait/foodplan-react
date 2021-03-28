@@ -8,5 +8,5 @@ export interface Dish {
 
     url?: string
 
-    imageUrl?: string
+    imageRefs: string[],
 }

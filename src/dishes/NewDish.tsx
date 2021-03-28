@@ -6,6 +6,7 @@ import {Dish} from "./Dish";
 import {FormWrapper} from "../common/FormWrapper";
 import {AuthContext} from "../services/Auth";
 import {addDish} from "../services/Db";
+import firebaseApp from "../services/Firebase";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -16,7 +17,11 @@ const useStyles = makeStyles(() => createStyles(({
     }
 })))
 
-function DishForm({onSubmit} : {onSubmit: (dish:Dish) => void}) {
+interface DishFormValue extends Dish {
+    selectedFiles: FileList
+}
+
+function DishForm({onSubmit}: { onSubmit: (dish: DishFormValue) => void }) {
     const {register, handleSubmit} = useForm()
 
     const classes = useStyles()
@@ -45,6 +50,12 @@ function DishForm({onSubmit} : {onSubmit: (dish:Dish) => void}) {
                     />
                 </Grid>
 
+                <Grid item xs={12}>
+                    <input type="file" ref={register} name="selectedFiles" multiple={true}/>
+
+                    <Button>Select image</Button>
+                </Grid>
+
                 <Grid item xs={12} className={classes.buttons}>
                     <Button type="submit" variant="contained" color="primary">Save it</Button>
 
@@ -62,7 +73,19 @@ export function NewDish() {
 
     const history = useHistory()
 
-    const saveDish = (dish:Dish) => {
+    const saveDish = async (dishValue: DishFormValue) => {
+        const {selectedFiles, ...dish} = dishValue
+
+        const imageRefs = await Promise.all(Array.from(selectedFiles).map(file =>
+            firebaseApp
+                .storage()
+                .ref(`images/${file.name}`)
+                .put(file)
+                .then((snapshot) => snapshot.ref.fullPath)
+        ))
+
+        dish.imageRefs = (dish.imageRefs || []).concat(imageRefs)
+
         addDish(dish, currentUser!)
 
         history.push("/dishes")

@@ -1,9 +1,10 @@
 import {useHistory, useRouteMatch} from "react-router-dom";
 import {Dish} from "./Dish";
-import {Card, CardHeader, CardMedia, CircularProgress, Fab, Grid} from "@material-ui/core";
+import {CircularProgress, Fab, Grid} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import {snapshotDishes} from "../services/Db";
 import {useEffect, useState} from "react";
+import {DishCard} from "./DishCard";
 
 export function DishList() {
     const history = useHistory()
@@ -29,17 +30,10 @@ export function DishList() {
         <Grid container spacing={3}>
             {dishes.map(dish =>
                 <Grid item xs={12} md={6} lg={4} key={dish.id}>
-                    {DishCard(dish)}
+                    <DishCard dish={dish} />
                 </Grid>
             )}
         </Grid>
     </>;
 }
 
-function DishCard(dish: Dish) {
-    return <Card style={{display: "flex"}}>
-        <CardHeader title={dish.name} style={{width: "70%"}}/>
-
-        {dish.imageUrl && <CardMedia image={dish.imageUrl} style={{width: "30%"}}/>}
-    </Card>;
-}
