@@ -1,12 +1,23 @@
-import {Button, createStyles, Grid, makeStyles, TextField} from "@material-ui/core";
-import React, {useContext} from "react";
+import {
+    Button,
+    createStyles,
+    Grid,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    makeStyles,
+    TextField
+} from "@material-ui/core";
+import React, {useContext, useRef} from "react";
 import {useForm} from "react-hook-form";
 import {Link, useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {FormWrapper} from "../common/FormWrapper";
 import {AuthContext} from "../services/Auth";
 import {addDish} from "../services/Db";
-import firebaseApp from "../services/Firebase";
+import {uploadFiles} from "../services/Firebase";
+import {AttachFile} from "@material-ui/icons";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -14,6 +25,10 @@ const useStyles = makeStyles(() => createStyles(({
         display: "flex",
         justifyContent: "space-between",
         width: "100%"
+    } ,
+
+    imageField: {
+        marginTop: "1em"
     }
 })))
 
@@ -21,8 +36,25 @@ interface DishFormValue extends Dish {
     selectedFiles: FileList
 }
 
+function FileSelection({ files } : { files: FileList }) {
+    return <List>
+        {Array.from(files).map(file =>
+            <ListItem key={file.name}>
+                <ListItemIcon>
+                    <AttachFile />
+                </ListItemIcon>
+                <ListItemText>{file.name}</ListItemText>
+            </ListItem>
+        )}
+    </List>;
+}
+
 function DishForm({onSubmit}: { onSubmit: (dish: DishFormValue) => void }) {
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit, watch} = useForm()
+
+    const fileFieldRef = useRef<HTMLInputElement|null>()
+
+    const selectedFiles = watch("selectedFiles")
 
     const classes = useStyles()
 
@@ -50,10 +82,19 @@ function DishForm({onSubmit}: { onSubmit: (dish: DishFormValue) => void }) {
                     />
                 </Grid>
 
-                <Grid item xs={12}>
-                    <input type="file" ref={register} name="selectedFiles" multiple={true}/>
+                <Grid item xs={12} className={classes.imageField}>
+                    <input
+                        type="file"
+                        ref={(e) => { register(e); fileFieldRef.current = e; }}
+                        name="selectedFiles"
+                        multiple={true}
+                        style={{display: "none"}}
+                        accept="image/*"
+                    />
 
-                    <Button>Select image</Button>
+                    <Button variant="contained" color="primary" onClick={() => fileFieldRef.current!.click()}>Select image</Button>
+
+                    {selectedFiles && <FileSelection files={selectedFiles} />}
                 </Grid>
 
                 <Grid item xs={12} className={classes.buttons}>
@@ -76,15 +117,7 @@ export function NewDish() {
     const saveDish = async (dishValue: DishFormValue) => {
         const {selectedFiles, ...dish} = dishValue
 
-        const imageRefs = await Promise.all(Array.from(selectedFiles).map(file =>
-            firebaseApp
-                .storage()
-                .ref(`images/${file.name}`)
-                .put(file)
-                .then((snapshot) => snapshot.ref.fullPath)
-        ))
-
-        dish.imageRefs = (dish.imageRefs || []).concat(imageRefs)
+        dish.imageRefs = await uploadFiles(selectedFiles, `images/${currentUser!.uid}`)
 
         addDish(dish, currentUser!)
 

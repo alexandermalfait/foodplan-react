@@ -27,3 +27,14 @@ export const signOut = () => {
     auth.signOut()
 }
 
+export const uploadFiles = async (files: FileList, path: string) => {
+    return await Promise.all(Array.from(files).map(async file => {
+        const result = await firebaseApp
+            .storage()
+            .ref(`${path}/${file.name}`)
+            .put(file);
+
+        return { path: result.ref.fullPath, url: await result.ref.getDownloadURL() as string }
+    }))
+
+}
