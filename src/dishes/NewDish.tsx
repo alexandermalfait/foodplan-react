@@ -1,23 +1,13 @@
-import {
-    Button,
-    createStyles,
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    makeStyles,
-    TextField
-} from "@material-ui/core";
-import React, {useContext, useRef} from "react";
-import {useForm} from "react-hook-form";
+import {Button, createStyles, Grid, makeStyles, TextField} from "@material-ui/core";
+import React, {useContext} from "react";
+import {Controller, useForm} from "react-hook-form";
 import {Link, useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {FormWrapper} from "../common/FormWrapper";
 import {AuthContext} from "../services/Auth";
 import {addDish} from "../services/Db";
 import {uploadFiles} from "../services/Firebase";
-import {AttachFile} from "@material-ui/icons";
+import {FileUpload} from "./FileUpload";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -36,25 +26,8 @@ interface DishFormValue extends Dish {
     selectedFiles: FileList
 }
 
-function FileSelection({ files } : { files: FileList }) {
-    return <List>
-        {Array.from(files).map(file =>
-            <ListItem key={file.name}>
-                <ListItemIcon>
-                    <AttachFile />
-                </ListItemIcon>
-                <ListItemText>{file.name}</ListItemText>
-            </ListItem>
-        )}
-    </List>;
-}
-
 function DishForm({onSubmit}: { onSubmit: (dish: DishFormValue) => void }) {
-    const {register, handleSubmit, watch} = useForm()
-
-    const fileFieldRef = useRef<HTMLInputElement|null>()
-
-    const selectedFiles = watch("selectedFiles")
+    const {register, handleSubmit, control} = useForm()
 
     const classes = useStyles()
 
@@ -83,18 +56,12 @@ function DishForm({onSubmit}: { onSubmit: (dish: DishFormValue) => void }) {
                 </Grid>
 
                 <Grid item xs={12} className={classes.imageField}>
-                    <input
-                        type="file"
-                        ref={(e) => { register(e); fileFieldRef.current = e; }}
+                    <Controller
+                        control={control}
                         name="selectedFiles"
-                        multiple={true}
-                        style={{display: "none"}}
-                        accept="image/*"
+                        defaultValue={null}
+                        render={({onChange}) => <FileUpload onChange={onChange} />}
                     />
-
-                    <Button variant="contained" color="primary" onClick={() => fileFieldRef.current!.click()}>Select image</Button>
-
-                    {selectedFiles && <FileSelection files={selectedFiles} />}
                 </Grid>
 
                 <Grid item xs={12} className={classes.buttons}>
