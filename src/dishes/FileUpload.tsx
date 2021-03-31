@@ -1,6 +1,6 @@
 import React, {useRef, useState} from "react";
 import {Button, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
-import {AttachFile} from "@material-ui/icons";
+import {AttachFile, Image} from "@material-ui/icons";
 
 export function FileUpload({onChange}: { onChange: (files: FileList) => void }) {
     const fileFieldRef = useRef<HTMLInputElement>(null)
@@ -23,7 +23,12 @@ export function FileUpload({onChange}: { onChange: (files: FileList) => void }) 
             }}
         />
 
-        <Button variant="contained" color="primary" onClick={() => fileFieldRef.current!.click()}>Select image</Button>
+        <Button
+            variant="contained"
+            color="primary"
+            onClick={() => fileFieldRef.current!.click()}
+            startIcon={<Image />}
+        >Select image</Button>
 
         {selectedFiles && <FileSelection files={selectedFiles}/>}
     </>

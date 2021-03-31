@@ -19,6 +19,10 @@ export function updateDish(dish: Dish, user: User) {
     userDocument(user).collection("dishes").doc(dish.id).update(dish)
 }
 
+export function deleteDish(dish: Dish, user: User) {
+    userDocument(user).collection("dishes").doc(dish.id).delete()
+}
+
 function documentToDish(d: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>) {
     return {...d.data(), id: d.id} as Dish;
 }

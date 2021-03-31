@@ -4,6 +4,8 @@ import {FileUpload} from "./FileUpload";
 import {Link} from "react-router-dom";
 import React from "react";
 import {Dish} from "./Dish";
+import {Delete, Save} from "@material-ui/icons";
+import {FormButtons} from "../common/FormButtons";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -22,7 +24,13 @@ export interface DishFormValue extends Dish {
     selectedFiles?: FileList
 }
 
-export function DishForm({onSubmit, currentValue}: { onSubmit: (dish: DishFormValue) => void, currentValue?: DishFormValue }) {
+type Props = {
+    onSubmit: (dish: DishFormValue) => void,
+    currentValue?: DishFormValue,
+    onDeleteDish?: () => void
+};
+
+export function DishForm({onSubmit, currentValue, onDeleteDish}: Props) {
     const {register, handleSubmit, control} = useForm({defaultValues: currentValue})
 
     const classes = useStyles()
@@ -60,12 +68,34 @@ export function DishForm({onSubmit, currentValue}: { onSubmit: (dish: DishFormVa
                     />
                 </Grid>
 
-                <Grid item xs={12} className={classes.buttons}>
-                    <Button type="submit" variant="contained" color="primary">Save it</Button>
+                <Grid item xs={12}>
+                    <FormButtons
+                        left={
+                            <>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<Save />}
+                                >Save it</Button>
+                            </>
 
-                    <Button color="secondary">
-                        <Link to="/dishes">Cancel</Link>
-                    </Button>
+                        }
+                        right={
+                            <>
+                                {currentValue?.id &&
+                                    <Button variant="contained" color="secondary" startIcon={<Delete />} onClick={onDeleteDish}>
+                                        Delete
+                                    </Button>
+                                }
+
+
+                                <Button color="secondary">
+                                    <Link to="/dishes">Cancel</Link>
+                                </Button>
+                            </>
+                        }
+                    />
                 </Grid>
             </Grid>
         </form>
