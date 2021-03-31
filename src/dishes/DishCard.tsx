@@ -13,7 +13,8 @@ const useStyles = makeStyles(createStyles({
 
     image: {
         width: "30%",
-        backgroundSize: "contain"
+        display: "flex",
+        backgroundSize: "cover"
     },
 }))
 
