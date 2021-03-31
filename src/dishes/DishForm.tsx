@@ -19,11 +19,11 @@ const useStyles = makeStyles(() => createStyles(({
 })))
 
 export interface DishFormValue extends Dish {
-    selectedFiles: FileList
+    selectedFiles?: FileList
 }
 
-export function DishForm({onSubmit}: { onSubmit: (dish: DishFormValue) => void }) {
-    const {register, handleSubmit, control} = useForm()
+export function DishForm({onSubmit, currentValue}: { onSubmit: (dish: DishFormValue) => void, currentValue?: DishFormValue }) {
+    const {register, handleSubmit, control} = useForm({defaultValues: currentValue})
 
     const classes = useStyles()
 

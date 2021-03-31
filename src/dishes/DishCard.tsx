@@ -4,7 +4,8 @@ import {Card, CardHeader, CardMedia, createStyles, makeStyles} from "@material-u
 const useStyles = makeStyles(createStyles({
     root: {
         display: "flex",
-        minHeight: "100px"
+        minHeight: "100px",
+        cursor: "pointer",
     },
 
     header: {
@@ -18,12 +19,12 @@ const useStyles = makeStyles(createStyles({
     },
 }))
 
-export function DishCard({dish}: { dish: Dish }) {
+export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
     const classes = useStyles()
 
     const imageUrl = dish.imageRefs && dish.imageRefs[0].url
 
-    return <Card className={classes.root}>
+    return <Card className={classes.root} onClick={onClick}>
         <CardHeader title={dish.name} className={classes.header}/>
 
         {imageUrl && <CardMedia image={imageUrl} className={classes.image} />}

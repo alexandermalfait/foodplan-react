@@ -15,7 +15,9 @@ export function NewDish() {
     const saveDish = async (dishValue: DishFormValue) => {
         const {selectedFiles, ...dish} = dishValue
 
-        dish.imageRefs = await uploadFiles(selectedFiles, `images/${currentUser!.uid}`)
+        if (selectedFiles) {
+            dish.imageRefs = await uploadFiles(selectedFiles, `images/${currentUser!.uid}`);
+        }
 
         addDish(dish, currentUser!)
 
