@@ -5,6 +5,7 @@ import React, {useContext} from "react";
 import {AuthContext} from "./services/Auth";
 import firebase from "firebase";
 import {signOut} from "./services/Firebase";
+import {TagIcon} from "./tags/TagIcon";
 
 const CurrentUserLink = ({user} : {user: firebase.User}) => {
     return <>
@@ -33,6 +34,12 @@ export const AppScreen = ({title, children} : { title?: string, children: React.
                 <Link to="/dishes">
                     <IconButton edge="end">
                         <MenuBook/>
+                    </IconButton>
+                </Link>
+
+                <Link to="/tags">
+                    <IconButton edge="end">
+                        <TagIcon />
                     </IconButton>
                 </Link>
 

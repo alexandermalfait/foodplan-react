@@ -7,6 +7,7 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import {AuthProvider} from "./services/Auth";
 import Login from "./login/Login";
 import PrivateRoute from "./login/PrivateRoute";
+import {Tags} from "./tags/Tags";
 
 const queryClient = new QueryClient()
 
@@ -19,6 +20,8 @@ function App() {
                         <PrivateRoute exact path="/" component={Planner}/>
 
                         <PrivateRoute path="/dishes" component={Dishes}/>
+
+                        <PrivateRoute path="/tags" component={Tags}/>
 
                         <Route path="/login" component={Login}/>
                     </Switch>
