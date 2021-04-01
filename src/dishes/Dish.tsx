@@ -1,3 +1,5 @@
+import {Tag} from "../tags/Tag";
+
 export interface Dish {
 
     id: string,
@@ -9,4 +11,6 @@ export interface Dish {
     url?: string
 
     imageRefs: Array<{path: string, url: string}>
+
+    tags: Array<Tag>
 }

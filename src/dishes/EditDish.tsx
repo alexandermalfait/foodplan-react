@@ -22,6 +22,7 @@ export function EditDish() {
 
         dishToUpdate.name = dishValue.name
         dishToUpdate.url = dishValue.url
+        dishToUpdate.tags = dishValue.tags
 
         if (dishValue.selectedFiles) {
             dishToUpdate.imageRefs = await uploadFiles(dishValue.selectedFiles, `images/${currentUser!.uid}`);

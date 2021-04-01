@@ -12,7 +12,7 @@ export class TagsDb {
         this.user = user;
     }
 
-    tagsCollection() {
+    private tagsCollection() {
         return userDocument(this.user).collection("tags");
     }
 
@@ -22,6 +22,10 @@ export class TagsDb {
 
     delete(tag: Tag) {
         this.tagsCollection().doc(tag.id).delete()
+    }
+
+    list():Promise<Array<Tag>> {
+        return this.tagsCollection().get().then(r => r.docs.map(this.documentToTag).sort(sortBy("name^")))
     }
 
     snapshot(callback: (tags:Array<Tag>) => void) {

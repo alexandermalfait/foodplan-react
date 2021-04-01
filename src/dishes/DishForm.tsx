@@ -6,6 +6,7 @@ import React from "react";
 import {Dish} from "./Dish";
 import {Delete, Save} from "@material-ui/icons";
 import {FormButtons} from "../common/FormButtons";
+import {TagSelector} from "../tags/TagSelector";
 
 const useStyles = makeStyles(() => createStyles(({
     buttons: {
@@ -37,7 +38,7 @@ export function DishForm({onSubmit, currentValue, onDeleteDish}: Props) {
 
     return <>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TextField
                         label="Dish name"
@@ -57,6 +58,15 @@ export function DishForm({onSubmit, currentValue, onDeleteDish}: Props) {
                         placeholder="http://some-url"
                         inputRef={register}
                         name="url"
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Controller
+                        control={control}
+                        name="tags"
+                        defaultValue={[]}
+                        render={({onChange, value}) => <TagSelector initialTags={value} onChange={onChange} />}
                     />
                 </Grid>
 
