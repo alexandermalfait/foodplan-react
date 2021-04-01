@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {Dish} from "./Dish";
 import {CircularProgress} from "@material-ui/core";
 import {DishForm, DishFormValue} from "./DishForm";
-import {deleteDish, fetchDishById, updateDish} from "../services/Db";
+import {deleteDish, fetchDishById, updateDish} from "./DishDb";
 import {FormWrapper} from "../common/FormWrapper";
 import {uploadFiles} from "../services/Firebase";
 import {AuthContext} from "../services/Auth";

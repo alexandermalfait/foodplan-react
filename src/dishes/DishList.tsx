@@ -2,7 +2,7 @@ import {useHistory, useRouteMatch} from "react-router-dom";
 import {Dish} from "./Dish";
 import {CircularProgress, Fab, Grid} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
-import {snapshotDishes} from "../services/Db";
+import {snapshotDishes} from "./DishDb";
 import {useContext, useEffect, useState} from "react";
 import {DishCard} from "./DishCard";
 import {AuthContext} from "../services/Auth";

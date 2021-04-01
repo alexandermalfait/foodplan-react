@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {useHistory} from "react-router-dom";
 import {FormWrapper} from "../common/FormWrapper";
 import {AuthContext} from "../services/Auth";
-import {addDish} from "../services/Db";
+import {addDish} from "./DishDb";
 import {uploadFiles} from "../services/Firebase";
 import {DishForm, DishFormValue} from "./DishForm";
 
