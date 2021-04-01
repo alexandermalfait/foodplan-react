@@ -44,6 +44,7 @@ export function DishForm({onSubmit, currentValue, onDeleteDish}: Props) {
                         required={true}
                         inputRef={register}
                         name={"name"}
+                        autoFocus
                         fullWidth
                     />
                 </Grid>
