@@ -1,11 +1,11 @@
 import {Dish} from "./Dish";
 import {CardMedia, createStyles, makeStyles, Paper} from "@material-ui/core";
 import {TagIcon} from "../tags/TagIcon";
+import {Http} from "@material-ui/icons";
 
 const useStyles = makeStyles(createStyles({
     root: {
         display: "flex",
-        cursor: "pointer",
         height: "100%"
     },
 
@@ -20,18 +20,29 @@ const useStyles = makeStyles(createStyles({
         display: "block",
         fontSize: "1.2em",
         marginBottom: "auto",
+        cursor: "pointer",
     } ,
 
-    tags: {
+    controls: {
 
     } ,
 
     tag: {
         display: "inline-block",
         fontSize: ".8em",
+        marginRight: ".2em",
 
         "& .tag-icon": {
             fontSize: "1em",
+            verticalAlign: "middle",
+        }
+    } ,
+
+    link: {
+        color: "gray",
+        marginLeft: ".5em",
+        "& svg": {
+            fontSize: "1.7em",
             verticalAlign: "middle",
         }
     } ,
@@ -49,17 +60,28 @@ export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
 
     const imageUrl = dish.imageRefs && dish.imageRefs[0].url
 
-    return <Paper className={classes.root} onClick={onClick}>
+    return <Paper className={classes.root}>
         <div className={classes.content}>
-            <strong className={classes.title} title={dish.name}>{dish.name}</strong>
+            <strong className={classes.title} title={dish.name} onClick={onClick}>
+                {dish.name}
+            </strong>
 
-            {dish.tags && <div className={classes.tags}>
-                {dish.tags.map(tag =>
-                    <div className={classes.tag} key={tag.id}>
-                        <TagIcon tag={tag} withLabel />
-                    </div>
-                )}
-            </div>}
+            {(dish.tags || dish.url) &&
+                <div className={classes.controls}>
+                    {dish.tags && dish.tags.map(tag =>
+                        <div className={classes.tag} key={tag.id}>
+                            <TagIcon tag={tag} withLabel />
+                        </div>
+                    )}
+
+                    {dish.url &&
+                        <a href={dish.url} target="_blank" rel="noreferrer" className={classes.link}>
+                            <Http />
+                        </a>
+                    }
+                </div>
+            }
+
         </div>
 
         {imageUrl && <CardMedia image={imageUrl} className={classes.image} />}
