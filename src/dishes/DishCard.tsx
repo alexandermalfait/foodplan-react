@@ -51,7 +51,8 @@ const useStyles = makeStyles(createStyles({
         flex: "0 0 30%",
         minHeight: "80px",
         display: "flex",
-        backgroundSize: "cover"
+        backgroundSize: "cover",
+        cursor: "pointer"
     },
 }))
 
@@ -59,6 +60,10 @@ export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
     const classes = useStyles()
 
     const imageUrl = dish.imageRefs && dish.imageRefs[0].url
+
+    function openImage(imageUrl: string) {
+        window.open(imageUrl, "_blank", 'noopener,noreferrer');
+    }
 
     return <Paper className={classes.root}>
         <div className={classes.content}>
@@ -84,6 +89,6 @@ export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
 
         </div>
 
-        {imageUrl && <CardMedia image={imageUrl} className={classes.image} />}
+        {imageUrl && <CardMedia image={imageUrl} className={classes.image} onClick={() => openImage(imageUrl)} />}
     </Paper>;
 }
