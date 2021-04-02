@@ -55,8 +55,8 @@ export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
 
             {dish.tags && <div className={classes.tags}>
                 {dish.tags.map(tag =>
-                    <div className={classes.tag}>
-                        <TagIcon key={tag.id} tag={tag} withLabel={true} />
+                    <div className={classes.tag} key={tag.id}>
+                        <TagIcon tag={tag} withLabel />
                     </div>
                 )}
             </div>}
