@@ -44,7 +44,7 @@ export function TagSelector( { onChange, initialTags } : { onChange: (tags:Array
                     control={
                         <Switch
                             style={{color: tag.color}}
-                            checked={!! selectedTags.find(t => t.id === tag.id)}
+                            checked={selectedTags.some(t => t.id === tag.id)}
                             onChange={e => setTagSelected(tag, e.target.checked)}
                         />
                     }
