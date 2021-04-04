@@ -94,13 +94,21 @@ export function Tags() {
 
     useEffect(() => tagsDb.snapshot(setTags), [tagsDb])
 
+    function deleteTag(tag:Tag) {
+        if (!window.confirm(`Delete ${tag.name}?`)) {
+            return
+        }
+
+        tagsDb.delete(tag);
+    }
+
     return <>
         <AppScreen>
             <FormWrapper title="Tags">
                 <NewTagForm tagSaved={tag => tagsDb.add(tag)}/>
 
                 <Box mt={2}>
-                    <TagList tags={tags} onDeleteTag={tag => tagsDb.delete(tag)} />
+                    <TagList tags={tags} onDeleteTag={deleteTag} />
                 </Box>
             </FormWrapper>
         </AppScreen>
