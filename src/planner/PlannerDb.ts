@@ -1,6 +1,14 @@
 import {userDocument} from "../services/Db";
 import firebase from "firebase";
 import {Dish} from "../dishes/Dish";
+import {useContext} from "react";
+import {AuthContext} from "../services/Auth";
+
+export function usePlannerDb() {
+    const currentUser = useContext(AuthContext);
+
+    return new PlannerDb(currentUser!)
+}
 
 export const DATE_FORMAT = "YYYY-MM-DD"
 
