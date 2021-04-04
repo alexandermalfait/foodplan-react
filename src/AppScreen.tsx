@@ -16,6 +16,12 @@ const CurrentUserLink = ({user} : {user: firebase.User}) => {
 export const AppScreen = ({title, children} : { title?: string, children: React.ReactNode }) => {
     const currentUser = useContext(AuthContext);
 
+    function doSignOut() {
+        if (window.confirm("Log out?")) {
+            signOut();
+        }
+    }
+
     return <>
         <AppBar position="static" className="app-bar">
             <Toolbar className="toolbar">
@@ -46,7 +52,7 @@ export const AppScreen = ({title, children} : { title?: string, children: React.
                 </Link>
 
                 {currentUser &&
-                    <IconButton edge="end" onClick={signOut}>
+                    <IconButton edge="end" onClick={doSignOut}>
                         <ExitToApp />
                     </IconButton>
                 }
