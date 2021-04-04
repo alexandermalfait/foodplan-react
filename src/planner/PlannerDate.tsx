@@ -5,6 +5,7 @@ import React from "react";
 import {useHistory} from "react-router-dom";
 import {DATE_FORMAT} from "./PlannerDb";
 import {Planning} from "./Planning";
+import {DishCard} from "../dishes/DishCard";
 
 const useStyles = makeStyles(createStyles({
     root: {
@@ -37,6 +38,11 @@ const useStyles = makeStyles(createStyles({
         flexGrow: 1
     },
 
+    dishCard: {
+        margin: ".5em",
+        boxShadow: "none",
+    },
+
     buttons: {}
 }))
 
@@ -67,7 +73,7 @@ export function PlannerDate({ day, plannings } : { day: Moment, plannings: Plann
                     {plannings.map((planning, index) => <>
                         {index > 0 && <Divider />}
 
-                        <strong>{planning.dish.name}</strong>
+                        <DishCard dish={planning.dish} onClick={() => {}} className={classes.dishCard} />
                     </>
                     )}
                 </div>

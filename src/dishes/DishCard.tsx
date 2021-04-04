@@ -6,7 +6,6 @@ import {Http} from "@material-ui/icons";
 const useStyles = makeStyles(createStyles({
     root: {
         display: "flex",
-        height: "100%"
     },
 
     content: {
@@ -56,7 +55,7 @@ const useStyles = makeStyles(createStyles({
     },
 }))
 
-export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
+export function DishCard({dish, onClick, className}: { dish: Dish, className?: string, onClick: () => void }) {
     const classes = useStyles()
 
     const imageUrl = dish.imageRefs && dish.imageRefs[0].url
@@ -65,7 +64,7 @@ export function DishCard({dish, onClick}: { dish: Dish, onClick: () => void }) {
         window.open(imageUrl, "_blank", 'noopener,noreferrer');
     }
 
-    return <Paper className={classes.root}>
+    return <Paper className={`${classes.root} ${className || ""}`}>
         <div className={classes.content}>
             <strong className={classes.title} title={dish.name} onClick={onClick}>
                 {dish.name}

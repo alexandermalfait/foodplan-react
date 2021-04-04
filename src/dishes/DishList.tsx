@@ -20,6 +20,10 @@ const useStyles = makeStyles(createStyles({
     tagSelector: {
         textAlign: "center",
         marginBottom: "1em",
+    } ,
+
+    dishCard: {
+        height: "100%",
     }
 }))
 
@@ -63,7 +67,7 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
             {visibleDishes.length ?
                 visibleDishes.map(dish =>
                     <Grid item xs={12} md={6} lg={4} key={dish.id}>
-                        <DishCard dish={dish} onClick={() => onClick(dish)} />
+                        <DishCard dish={dish} onClick={() => onClick(dish)} className={classes.dishCard} />
                     </Grid>
                 )
                 :
