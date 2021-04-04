@@ -7,6 +7,7 @@ import {Week} from "./Week";
 import {AppScreen} from "../AppScreen";
 import {usePlannerDb} from "./PlannerDb";
 import {Planning} from "./Planning";
+import {useQuery} from "react-query";
 
 function thisMonday() {
     return moment().startOf('isoWeek');
@@ -16,8 +17,6 @@ export function Planner() {
     const [currentMonday, setCurrentMonday] = useState(thisMonday())
 
     const [visibleDates, setVisibleDates] = useState<Moment[]>([])
-
-    const [plannings, setPlannings] = useState<Planning[]>([])
 
     const db = usePlannerDb()
 
@@ -39,22 +38,24 @@ export function Planner() {
         setVisibleDates(new Week(currentMonday).getDates())
     }, [ currentMonday ])
 
-    useEffect(function () {
+    const queryKey = [ "plannings", ...visibleDates.map(d => d.toDate().getTime()) ]
+
+    const { data:plannings } = useQuery<Planning[]>(queryKey, () => {
         if (!visibleDates.length) {
-            return
+            return []
         }
 
         const firstDate = visibleDates[0];
         const lastDate = visibleDates[visibleDates.length - 1]
 
-        db.list(firstDate.toDate(), lastDate.toDate()).then(setPlannings)
-    }, [visibleDates, db])
+        return db.list(firstDate.toDate(), lastDate.toDate())
+    })
 
     return <>
         <AppScreen>
             <Box py={1}>
                 {visibleDates.map(day => {
-                    const planningsForDate = plannings.filter(p => day.isSame(p.date, "day"));
+                    const planningsForDate = plannings ? plannings.filter(p => day.isSame(p.date, "day")) : []
 
                     return <PlannerDate
                             key={day.toString()}
