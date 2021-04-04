@@ -1,18 +1,25 @@
 import {AppScreen} from "../AppScreen";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {Route, Switch, useHistory, useRouteMatch} from "react-router-dom";
 import {DishList} from "./DishList";
 import {NewDish} from "./NewDish";
 import {EditDish} from "./EditDish";
+import {Dish} from "./Dish";
 
 
 export default function Dishes() {
     const { path } = useRouteMatch();
 
+    const history = useHistory()
+
+    function editDish(dish: Dish) {
+        history.push(`${path}/edit/${dish.id}`);
+    }
+
     return <>
         <AppScreen title={"Dishes"}>
             <Switch>
                 <Route exact path={path}>
-                    <DishList />
+                    <DishList onClick={editDish}/>
                 </Route>
 
                 <Route path={`${path}/edit/:dishId`}>

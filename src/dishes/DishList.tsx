@@ -1,4 +1,4 @@
-import {useHistory, useRouteMatch} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {CircularProgress, Container, createStyles, Fab, Grid, makeStyles} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
@@ -23,9 +23,8 @@ const useStyles = makeStyles(createStyles({
     }
 }))
 
-export function DishList() {
+export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
     const history = useHistory()
-    const {path} = useRouteMatch();
 
     const classes = useStyles()
 
@@ -35,12 +34,8 @@ export function DishList() {
 
     const [ filteredTags, setFilteredTags ] = useState<Array<Tag>>([])
 
-    function editDish(dish: Dish) {
-        history.push(`${path}/edit/${dish.id}`);
-    }
-
     function createDish() {
-        history.push(`${path}/new`);
+        history.push(`/dishes/new`);
     }
 
     useEffect(() => snapshotDishes(currentUser!, setDishes), [currentUser])
@@ -68,7 +63,7 @@ export function DishList() {
             {visibleDishes.length ?
                 visibleDishes.map(dish =>
                     <Grid item xs={12} md={6} lg={4} key={dish.id}>
-                        <DishCard dish={dish} onClick={() => editDish(dish)} />
+                        <DishCard dish={dish} onClick={() => onClick(dish)} />
                     </Grid>
                 )
                 :
