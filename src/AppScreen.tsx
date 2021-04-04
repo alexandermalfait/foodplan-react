@@ -1,4 +1,4 @@
-import {AppBar, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Container, Hidden, IconButton, Toolbar, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {CalendarToday, ExitToApp, MenuBook} from "@material-ui/icons";
 import React, {useContext} from "react";
@@ -19,7 +19,9 @@ export const AppScreen = ({title, children} : { title?: string, children: React.
     return <>
         <AppBar position="static" className="app-bar">
             <Toolbar className="toolbar">
-                {currentUser ? <CurrentUserLink user={currentUser}/> : "(not logged in)"}
+                <Hidden smDown>
+                    {currentUser ? <CurrentUserLink user={currentUser}/> : "(not logged in)"}
+                </Hidden>
 
                 <Typography variant="h1">
                     {title ?? "And the dinner is..."}
