@@ -6,15 +6,19 @@ import {SkipNext, SkipPrevious, Today} from "@material-ui/icons";
 import {Week} from "./Week";
 import {AppScreen} from "../AppScreen";
 
+function thisMonday() {
+    return moment().startOf('isoWeek');
+}
+
 export function Planner() {
-    const [currentMonday, setCurrentMonday] = useState(moment().day(1))
+    const [currentMonday, setCurrentMonday] = useState(thisMonday())
 
     function getWeekDates(): Moment[] {
         return new Week(currentMonday).getDates()
     }
 
     function setToday() {
-        setCurrentMonday(moment().day(1))
+        setCurrentMonday(moment().startOf('isoWeek'))
     }
 
     function shiftWeek(delta: number) {
