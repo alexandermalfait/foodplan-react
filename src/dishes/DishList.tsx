@@ -2,12 +2,13 @@ import {useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {CircularProgress, Container, createStyles, Fab, Grid, makeStyles} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {DishCard} from "./DishCard";
 import {Alert} from "@material-ui/lab";
 import {TagSelector} from "../tags/TagSelector";
 import {Tag} from "../tags/Tag";
 import {useDishDb} from "./DishDb";
+import {useQuery} from "react-query";
 
 const useStyles = makeStyles(createStyles({
     fab: {
@@ -31,8 +32,6 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
 
     const classes = useStyles()
 
-    const [ dishes, setDishes ] = useState<Array<Dish>|null>(null)
-
     const [ filteredTags, setFilteredTags ] = useState<Array<Tag>>([])
 
     const db = useDishDb()
@@ -41,13 +40,15 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
         history.push(`/dishes/new`);
     }
 
-    useEffect(() => db.snapshotDishes(setDishes), [db])
+    const { isLoading, data:dishes } = useQuery('dishes', () => db.list())
 
-    if (dishes == null) {
+    if (isLoading) {
         return <CircularProgress />
     }
 
-    const visibleDishes = dishes.filter(dish => !filteredTags || filteredTags.every(filteredTag => dish.tags.some(dishTag => dishTag.id === filteredTag.id)))
+    const visibleDishes = dishes!.filter(dish =>
+        !filteredTags || filteredTags.every(filteredTag => dish.tags.some(dishTag => dishTag.id === filteredTag.id))
+    )
 
     return <>
         <Fab

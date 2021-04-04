@@ -32,6 +32,10 @@ export class DishDb extends Db {
         return {...d.data(), id: d.id} as Dish;
     }
 
+    list() {
+        return this.dishesCollection().get().then(r => r.docs.map(this.documentToDish))
+    }
+
     snapshotDishes(callback: (dishes: Array<Dish>) => void) {
         return this.dishesCollection().onSnapshot({
             next: snapshot => {
