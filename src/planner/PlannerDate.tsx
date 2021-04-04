@@ -1,9 +1,10 @@
-import {Card, createStyles, IconButton, makeStyles} from "@material-ui/core";
+import {Card, createStyles, Divider, IconButton, makeStyles} from "@material-ui/core";
 import moment, {Moment} from "moment";
 import {MenuBook} from "@material-ui/icons";
 import React from "react";
 import {useHistory} from "react-router-dom";
 import {DATE_FORMAT} from "./PlannerDb";
+import {Planning} from "./Planning";
 
 const useStyles = makeStyles(createStyles({
     root: {
@@ -39,7 +40,7 @@ const useStyles = makeStyles(createStyles({
     buttons: {}
 }))
 
-export function PlannerDate({ day } : { day: Moment }) {
+export function PlannerDate({ day, plannings } : { day: Moment, plannings: Planning[]}) {
     const classes = useStyles()
 
     const history = useHistory()
@@ -62,7 +63,14 @@ export function PlannerDate({ day } : { day: Moment }) {
             </div>
 
             <div className={classes.dateContents}>
-                <div className={classes.planning}/>
+                <div className={classes.planning}>
+                    {plannings.map((planning, index) => <>
+                        {index > 0 && <Divider />}
+
+                        <strong>{planning.dish.name}</strong>
+                    </>
+                    )}
+                </div>
 
                 <div className={classes.buttons}>
                     <IconButton onClick={() => selectDish()}>

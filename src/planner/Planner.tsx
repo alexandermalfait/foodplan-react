@@ -5,6 +5,8 @@ import moment, {Moment} from "moment";
 import {SkipNext, SkipPrevious, Today} from "@material-ui/icons";
 import {Week} from "./Week";
 import {AppScreen} from "../AppScreen";
+import {usePlannerDb} from "./PlannerDb";
+import {Planning} from "./Planning";
 
 function thisMonday() {
     return moment().startOf('isoWeek');
@@ -13,9 +15,11 @@ function thisMonday() {
 export function Planner() {
     const [currentMonday, setCurrentMonday] = useState(thisMonday())
 
-    function getWeekDates(): Moment[] {
-        return new Week(currentMonday).getDates()
-    }
+    const [visibleDates, setVisibleDates] = useState<Moment[]>([])
+
+    const [plannings, setPlannings] = useState<Planning[]>([])
+
+    const db = usePlannerDb()
 
     function setToday() {
         setCurrentMonday(moment().startOf('isoWeek'))
@@ -25,15 +29,34 @@ export function Planner() {
         setCurrentMonday(currentMonday.clone().add(delta, 'week'));
     }
 
-    function loadPlanning() {
-    }
+    useEffect(() => {
+        setVisibleDates(new Week(currentMonday).getDates())
+    }, [ currentMonday ])
 
-    useEffect(loadPlanning, [currentMonday])
+    useEffect(function () {
+        if (!visibleDates.length) {
+            return
+        }
+
+        const firstDate = visibleDates[0];
+        const lastDate = visibleDates[visibleDates.length - 1]
+
+        db.list(firstDate.toDate(), lastDate.toDate()).then(setPlannings)
+    }, [visibleDates, db])
 
     return <>
         <AppScreen>
             <Box py={1}>
-                {getWeekDates().map(day => <PlannerDate day={day} key={day.toString()}/>)}
+                {visibleDates.map(day => {
+                    const planningsForDate = plannings.filter(p => day.isSame(p.date, "day"));
+
+                    return <PlannerDate
+                            key={day.toString()}
+                            day={day}
+                            plannings={planningsForDate}
+                        />;
+                    }
+                )}
             </Box>
 
             <Box display="flex" justifyContent="space-between">
