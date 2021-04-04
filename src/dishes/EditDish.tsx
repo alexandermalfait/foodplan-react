@@ -3,15 +3,17 @@ import {useContext, useEffect, useState} from "react";
 import {Dish} from "./Dish";
 import {CircularProgress} from "@material-ui/core";
 import {DishForm, DishFormValue} from "./DishForm";
-import {deleteDish, fetchDishById, updateDish} from "./DishDb";
 import {FormWrapper} from "../common/FormWrapper";
 import {uploadFiles} from "../services/Firebase";
 import {AuthContext} from "../services/Auth";
+import {useDishDb} from "./DishDb";
 
 export function EditDish() {
     const { dishId } = useParams<{dishId: string}>()
 
     const [ dish, setDish ] = useState<Dish|null>(null)
+
+    const db = useDishDb()
 
     const currentUser = useContext(AuthContext);
 
@@ -28,9 +30,7 @@ export function EditDish() {
             dishToUpdate.imageRefs = await uploadFiles(dishValue.selectedFiles, `images/${currentUser!.uid}`);
         }
 
-        updateDish(dishToUpdate, currentUser!)
-
-        history.push("/dishes")
+        db.update(dishToUpdate).then(() => history.push("/dishes"))
     };
 
     const onDeleteDish = () => {
@@ -38,14 +38,12 @@ export function EditDish() {
             return
         }
 
-        deleteDish(dish!, currentUser!);
-
-        history.push("/dishes")
+        db.delete(dish!).then(() => history.push("/dishes"))
     };
 
     useEffect(() => {
-        fetchDishById(currentUser!, dishId).then(setDish)
-    }, [dishId, currentUser])
+        db.fetchDishById(dishId).then(setDish)
+    }, [dishId, db])
 
     if (!dish) {
         return <CircularProgress />

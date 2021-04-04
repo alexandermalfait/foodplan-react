@@ -2,13 +2,12 @@ import {useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {CircularProgress, Container, createStyles, Fab, Grid, makeStyles} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
-import {snapshotDishes} from "./DishDb";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DishCard} from "./DishCard";
-import {AuthContext} from "../services/Auth";
 import {Alert} from "@material-ui/lab";
 import {TagSelector} from "../tags/TagSelector";
 import {Tag} from "../tags/Tag";
+import {useDishDb} from "./DishDb";
 
 const useStyles = makeStyles(createStyles({
     fab: {
@@ -32,17 +31,17 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
 
     const classes = useStyles()
 
-    const currentUser = useContext(AuthContext)
-
     const [ dishes, setDishes ] = useState<Array<Dish>|null>(null)
 
     const [ filteredTags, setFilteredTags ] = useState<Array<Tag>>([])
+
+    const db = useDishDb()
 
     function createDish() {
         history.push(`/dishes/new`);
     }
 
-    useEffect(() => snapshotDishes(currentUser!, setDishes), [currentUser])
+    useEffect(() => db.snapshotDishes(setDishes), [db])
 
     if (dishes == null) {
         return <CircularProgress />

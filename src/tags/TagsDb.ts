@@ -1,27 +1,19 @@
-import {userDocument} from "../services/Db";
 import firebase from "firebase";
 import {Tag} from "./Tag";
 import {sortBy} from "sort-by-typescript";
+import {Db} from "../services/Db";
 
-type User = firebase.User;
-
-export class TagsDb {
-    private user: User;
-
-    constructor(user: User) {
-        this.user = user;
-    }
-
+export class TagsDb extends Db {
     private tagsCollection() {
-        return userDocument(this.user).collection("tags");
+        return this.userDocument().collection("tags");
     }
 
     add(tag: Tag) {
-        this.tagsCollection().add(tag)
+        return this.tagsCollection().add(tag)
     }
 
     delete(tag: Tag) {
-        this.tagsCollection().doc(tag.id).delete()
+        return this.tagsCollection().doc(tag.id).delete()
     }
 
     list():Promise<Array<Tag>> {

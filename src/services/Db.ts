@@ -5,7 +5,14 @@ export const db = firebaseApp.firestore()
 
 type User = firebase.User;
 
-export function userDocument(user: User) {
-    return db.collection("users").doc(user.uid);
-}
+export abstract class Db {
+    protected user: User;
 
+    constructor(user: User) {
+        this.user = user;
+    }
+
+    protected userDocument() {
+        return db.collection("users").doc(this.user.uid);
+    }
+}

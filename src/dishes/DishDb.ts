@@ -1,45 +1,54 @@
 import {Dish} from "./Dish";
 import firebase from "firebase";
 import {sortBy} from "sort-by-typescript";
-import {userDocument} from "../services/Db";
+import {Db,} from "../services/Db";
+import {useContext, useMemo} from "react";
+import {AuthContext} from "../services/Auth";
 
-type User = firebase.User;
+export function useDishDb() {
+    const currentUser = useContext(AuthContext);
 
-function dishesCollection(user: firebase.User) {
-    return userDocument(user).collection("dishes");
+    return useMemo(() => new DishDb(currentUser!), [currentUser])
 }
 
-export function addDish(dish: Dish, user: User) {
-    userDocument(user).collection("dishes").add(dish)
+export class DishDb extends Db {
+    private dishesCollection() {
+        return this.userDocument().collection("dishes");
+    }
+
+    add(dish: Dish) {
+        return this.dishesCollection().add(dish)
+    }
+
+    update(dish: Dish) {
+        return this.dishesCollection().doc(dish.id).update(dish)
+    }
+
+    delete(dish: Dish) {
+        return this.dishesCollection().doc(dish.id).delete()
+    }
+
+    documentToDish(d: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>) {
+        return {...d.data(), id: d.id} as Dish;
+    }
+
+    snapshotDishes(callback: (dishes: Array<Dish>) => void) {
+        return this.dishesCollection().onSnapshot({
+            next: snapshot => {
+                const dishes = snapshot.docs
+                    .map(this.documentToDish)
+                    .sort(sortBy("name^")); // case insensitive
+
+                return callback(dishes);
+            },
+            error: (e) => console.error(e)
+        })
+    }
+
+    async fetchDishById(dishId: string): Promise<Dish> {
+        const snapshot = await this.dishesCollection().doc(dishId).get();
+
+        return this.documentToDish(snapshot)
+    }
 }
 
-export function updateDish(dish: Dish, user: User) {
-    dishesCollection(user).doc(dish.id).update(dish)
-}
-
-export function deleteDish(dish: Dish, user: User) {
-    dishesCollection(user).doc(dish.id).delete()
-}
-
-function documentToDish(d: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>) {
-    return {...d.data(), id: d.id} as Dish;
-}
-
-export function snapshotDishes(user: firebase.User, callback: (dishes: Array<Dish>) => void) {
-    return dishesCollection(user).onSnapshot({
-        next: snapshot => {
-            const dishes = snapshot.docs
-                .map(documentToDish)
-                .sort(sortBy("name^")); // case insensitive
-
-            return callback(dishes);
-        },
-        error: (e) => console.error(e)
-    })
-}
-
-export async function fetchDishById(user: firebase.User, dishId: string): Promise<Dish> {
-    const snapshot = await dishesCollection(user).doc(dishId).get();
-
-    return documentToDish(snapshot)
-}
