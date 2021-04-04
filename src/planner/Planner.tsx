@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Box, Button} from "@material-ui/core";
+import {Box, Button, ButtonGroup} from "@material-ui/core";
 import {PlannerDate} from "./PlannerDate";
 import moment, {Moment} from "moment";
 import {SkipNext, SkipPrevious, Today} from "@material-ui/icons";
@@ -11,6 +11,28 @@ import {useQuery} from "react-query";
 
 function thisMonday() {
     return moment().startOf('isoWeek');
+}
+
+function WeekControls(props: { onPreviousWeek: () => void, onToday: () => void, onNextWeek: () => void }) {
+    return <Box display="flex" justifyContent="center">
+        <ButtonGroup variant="contained">
+            <Button onClick={props.onPreviousWeek}>
+                <SkipPrevious/>
+                Prev week
+            </Button>
+
+            <Button onClick={props.onToday}>
+                <Today/>
+                Today
+            </Button>
+
+            <Button onClick={props.onNextWeek}>
+                Next week
+                <SkipNext/>
+            </Button>
+        </ButtonGroup>
+
+    </Box>;
 }
 
 export function Planner() {
@@ -53,11 +75,13 @@ export function Planner() {
 
     return <>
         <AppScreen>
+            <WeekControls onPreviousWeek={() => shiftWeek(-1)} onToday={setToday} onNextWeek={() => shiftWeek(1)}/>
+
             <Box py={1}>
                 {visibleDates.map(day => {
-                    const planningsForDate = plannings ? plannings.filter(p => day.isSame(p.date, "day")) : []
+                        const planningsForDate = plannings ? plannings.filter(p => day.isSame(p.date, "day")) : []
 
-                    return <PlannerDate
+                        return <PlannerDate
                             key={day.toString()}
                             day={day}
                             plannings={planningsForDate}
@@ -67,22 +91,7 @@ export function Planner() {
                 )}
             </Box>
 
-            <Box display="flex" justifyContent="space-between">
-                <Button onClick={() => shiftWeek(-1)} variant="contained">
-                    <SkipPrevious />
-                    Prev week
-                </Button>
-
-                <Button onClick={setToday} variant="contained" style={{background: "beige"}}>
-                    <Today />
-                    Today
-                </Button>
-
-                <Button onClick={() => shiftWeek(1)} variant="contained" >
-                    Next week
-                    <SkipNext />
-                </Button>
-            </Box>
+            <WeekControls onPreviousWeek={() => shiftWeek(-1)} onToday={setToday} onNextWeek={() => shiftWeek(1)}/>
         </AppScreen>
 
     </>
