@@ -1,6 +1,6 @@
 import {Card, createStyles, Divider, IconButton, makeStyles} from "@material-ui/core";
 import moment, {Moment} from "moment";
-import {MenuBook} from "@material-ui/icons";
+import {HighlightOff, MenuBook} from "@material-ui/icons";
 import React from "react";
 import {useHistory} from "react-router-dom";
 import {DATE_FORMAT} from "./PlannerDb";
@@ -43,10 +43,23 @@ const useStyles = makeStyles(createStyles({
         boxShadow: "none",
     },
 
+    deleteIcon: {
+        verticalAlign: "baseline",
+        fontSize: ".8em",
+        marginLeft: ".3em",
+        color: "silver",
+    },
+
     buttons: {}
 }))
 
-export function PlannerDate({ day, plannings } : { day: Moment, plannings: Planning[]}) {
+interface Props {
+    day: Moment;
+    plannings: Planning[];
+    deletePlanning: (planning: Planning) => void;
+}
+
+export function PlannerDate({ day, plannings, deletePlanning } : Props) {
     const classes = useStyles()
 
     const history = useHistory()
@@ -73,7 +86,14 @@ export function PlannerDate({ day, plannings } : { day: Moment, plannings: Plann
                     {plannings.map((planning, index) => <>
                         {index > 0 && <Divider />}
 
-                        <DishCard dish={planning.dish} onClick={() => {}} className={classes.dishCard} />
+                        <DishCard
+                            dish={planning.dish}
+                            className={classes.dishCard}
+                            onClick={() => deletePlanning(planning)}
+                            titleControls={
+                                <HighlightOff className={classes.deleteIcon} />
+                            }
+                        />
                     </>
                     )}
                 </div>

@@ -29,6 +29,12 @@ export function Planner() {
         setCurrentMonday(currentMonday.clone().add(delta, 'week'));
     }
 
+    function deletePlanning(planning:Planning) {
+        if(window.confirm(`Remove '${planning.dish.name}'?`)) {
+            db.delete(planning).then(() => setVisibleDates([...visibleDates]))
+        }
+    }
+
     useEffect(() => {
         setVisibleDates(new Week(currentMonday).getDates())
     }, [ currentMonday ])
@@ -54,6 +60,7 @@ export function Planner() {
                             key={day.toString()}
                             day={day}
                             plannings={planningsForDate}
+                            deletePlanning={deletePlanning}
                         />;
                     }
                 )}

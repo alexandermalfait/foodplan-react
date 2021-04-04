@@ -2,6 +2,7 @@ import {Dish} from "./Dish";
 import {CardMedia, createStyles, makeStyles, Paper} from "@material-ui/core";
 import {TagIcon} from "../tags/TagIcon";
 import {Http} from "@material-ui/icons";
+import React from "react";
 
 const useStyles = makeStyles(createStyles({
     root: {
@@ -55,7 +56,17 @@ const useStyles = makeStyles(createStyles({
     },
 }))
 
-export function DishCard({dish, onClick, className}: { dish: Dish, className?: string, onClick: () => void }) {
+interface Props {
+    dish: Dish
+
+    className?: string
+
+    onClick?: () => void
+
+    titleControls?: React.ReactNode
+}
+
+export function DishCard({dish, onClick, className, titleControls}: Props) {
     const classes = useStyles()
 
     const imageUrl = dish.imageRefs && dish.imageRefs[0].url
@@ -68,6 +79,8 @@ export function DishCard({dish, onClick, className}: { dish: Dish, className?: s
         <div className={classes.content}>
             <strong className={classes.title} title={dish.name} onClick={onClick}>
                 {dish.name}
+
+                {titleControls}
             </strong>
 
             {(dish.tags || dish.url) &&

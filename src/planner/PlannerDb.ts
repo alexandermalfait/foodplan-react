@@ -52,6 +52,10 @@ export class PlannerDb {
         }
     }
 
+    delete(planning: Planning) {
+        return this.planningCollection().doc(planning.id).delete()
+    }
+
     /*delete(tag: Tag) {
         this.tagsCollection().doc(tag.id).delete()
     }
@@ -70,6 +74,5 @@ export class PlannerDb {
     }
 
     */
-
 }
 
