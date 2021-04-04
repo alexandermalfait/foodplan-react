@@ -8,6 +8,7 @@ import {AuthProvider} from "./services/Auth";
 import Login from "./login/Login";
 import PrivateRoute from "./login/PrivateRoute";
 import {Tags} from "./tags/Tags";
+import PlanDish from "./planner/PlanDish";
 
 const queryClient = new QueryClient()
 
@@ -18,6 +19,8 @@ function App() {
                 <BrowserRouter>
                     <Switch>
                         <PrivateRoute exact path="/" component={Planner}/>
+
+                        <PrivateRoute path="/planner/:date/select" component={PlanDish}/>
 
                         <PrivateRoute path="/dishes" component={Dishes}/>
 
