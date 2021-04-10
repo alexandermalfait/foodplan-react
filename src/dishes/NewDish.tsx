@@ -5,6 +5,7 @@ import {AuthContext} from "../services/Auth";
 import {uploadFiles} from "../services/Firebase";
 import {DishForm, DishFormValue} from "./DishForm";
 import {useDishDb} from "./DishDb";
+import {useMutation} from "react-query";
 
 
 export function NewDish() {
@@ -14,7 +15,7 @@ export function NewDish() {
 
     const db = useDishDb()
 
-    const saveDish = async (dishValue: DishFormValue) => {
+    const saveDishMutation = useMutation("dishes",async (dishValue: DishFormValue) => {
         const {selectedFiles, ...dish} = dishValue
 
         if (selectedFiles) {
@@ -22,11 +23,11 @@ export function NewDish() {
         }
 
         db.add(dish).then(() => history.push("/dishes"))
+    })
 
-    };
     return <>
         <FormWrapper title="New Dish">
-            <DishForm onSubmit={saveDish}/>
+            <DishForm onSubmit={d => saveDishMutation.mutate(d)} isSaving={saveDishMutation.isLoading}/>
         </FormWrapper>
     </>;
 }

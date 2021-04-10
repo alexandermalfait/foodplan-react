@@ -7,6 +7,7 @@ import {FormWrapper} from "../common/FormWrapper";
 import {uploadFiles} from "../services/Firebase";
 import {AuthContext} from "../services/Auth";
 import {useDishDb} from "./DishDb";
+import {useMutation} from "react-query";
 
 export function EditDish() {
     const { dishId } = useParams<{dishId: string}>()
@@ -19,7 +20,7 @@ export function EditDish() {
 
     const history = useHistory()
 
-    const onSaveDish = async (dishValue: DishFormValue) => {
+    const saveDishMutation = useMutation("dishes", async (dishValue: DishFormValue) => {
         const dishToUpdate = dish!;
 
         dishToUpdate.name = dishValue.name
@@ -31,7 +32,7 @@ export function EditDish() {
         }
 
         db.update(dishToUpdate).then(() => history.push("/dishes"))
-    };
+    })
 
     const onDeleteDish = () => {
         if (! window.confirm("Sure you want to delete this thing?")) {
@@ -51,7 +52,12 @@ export function EditDish() {
 
     return <>
         <FormWrapper title={"Edit dish"}>
-            <DishForm onSubmit={onSaveDish} currentValue={{...dish, selectedFiles:undefined}} onDeleteDish={onDeleteDish} />
+            <DishForm
+                onSubmit={d => saveDishMutation.mutate(d)}
+                currentValue={{...dish, selectedFiles:undefined}}
+                onDeleteDish={onDeleteDish}
+                isSaving={saveDishMutation.isLoading}
+            />
         </FormWrapper>
     </>
 }

@@ -4,7 +4,7 @@ import {FileUpload} from "../common/FileUpload";
 import {Link} from "react-router-dom";
 import React from "react";
 import {Dish} from "./Dish";
-import {Delete, Save} from "@material-ui/icons";
+import {Delete, HourglassEmpty, Save} from "@material-ui/icons";
 import {FormButtons} from "../common/FormButtons";
 import {TagSelector} from "../tags/TagSelector";
 
@@ -28,10 +28,11 @@ export interface DishFormValue extends Dish {
 type Props = {
     onSubmit: (dish: DishFormValue) => void,
     currentValue?: DishFormValue,
-    onDeleteDish?: () => void
+    onDeleteDish?: () => void,
+    isSaving: boolean
 };
 
-export function DishForm({onSubmit, currentValue, onDeleteDish}: Props) {
+export function DishForm({onSubmit, currentValue, onDeleteDish, isSaving}: Props) {
     const {register, handleSubmit, control} = useForm({defaultValues: currentValue})
 
     const classes = useStyles()
@@ -87,8 +88,11 @@ export function DishForm({onSubmit, currentValue, onDeleteDish}: Props) {
                                     type="submit"
                                     variant="contained"
                                     color="primary"
-                                    startIcon={<Save />}
-                                >Save it</Button>
+                                    startIcon={isSaving ? <HourglassEmpty /> : <Save />}
+                                    disabled={isSaving}
+                                >
+                                    Save it
+                                </Button>
                             </>
 
                         }
