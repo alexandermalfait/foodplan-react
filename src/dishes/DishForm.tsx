@@ -1,6 +1,6 @@
 import {Controller, useForm} from "react-hook-form";
 import {Button, createStyles, Grid, makeStyles, TextField} from "@material-ui/core";
-import {FileUpload} from "./FileUpload";
+import {FileUpload} from "../common/FileUpload";
 import {Link} from "react-router-dom";
 import React from "react";
 import {Dish} from "./Dish";
