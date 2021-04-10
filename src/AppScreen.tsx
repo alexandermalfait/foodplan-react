@@ -1,4 +1,4 @@
-import {AppBar, Container, Hidden, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Avatar, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {CalendarToday, ExitToApp, MenuBook} from "@material-ui/icons";
 import React, {useContext} from "react";
@@ -9,7 +9,7 @@ import {TagIcon} from "./tags/TagIcon";
 
 const CurrentUserLink = ({user} : {user: firebase.User}) => {
     return <>
-        <strong>{user.email}</strong>
+        <Avatar src={user.photoURL || undefined} alt={user.email || undefined} />
     </>
 }
 
@@ -25,9 +25,7 @@ export const AppScreen = ({title, children} : { title?: string, children: React.
     return <>
         <AppBar position="static" className="app-bar">
             <Toolbar className="toolbar">
-                <Hidden smDown>
-                    {currentUser ? <CurrentUserLink user={currentUser}/> : "(not logged in)"}
-                </Hidden>
+                {currentUser && <CurrentUserLink user={currentUser}/>}
 
                 <Typography variant="h1">
                     {title ?? "And the dinner is..."}
