@@ -7,7 +7,7 @@ import {Week} from "./Week";
 import {AppScreen} from "../AppScreen";
 import {usePlannerDb} from "./PlannerDb";
 import {Planning} from "./Planning";
-import {useQuery} from "react-query";
+import {useMutation, useQuery} from "react-query";
 
 function thisMonday() {
     return moment().startOf('isoWeek');
@@ -50,17 +50,19 @@ export function Planner() {
         setCurrentMonday(currentMonday.clone().add(delta, 'week'));
     }
 
-    function deletePlanning(planning:Planning) {
-        if(window.confirm(`Remove '${planning.dish.name}'?`)) {
-            db.delete(planning).then(() => setVisibleDates([...visibleDates]))
-        }
-    }
-
     useEffect(() => {
         setVisibleDates(new Week(currentMonday).getDates())
     }, [ currentMonday ])
 
     const queryKey = [ "plannings", ...visibleDates.map(d => d.toDate().getTime()) ]
+
+    const deletePlanningMutation = useMutation(queryKey, db.delete.bind(db))
+
+    function deletePlanning(planning:Planning) {
+        if(window.confirm(`Remove '${planning.dish.name}'?`)) {
+            deletePlanningMutation.mutate(planning)
+        }
+    }
 
     const { data:plannings } = useQuery<Planning[]>(queryKey, () => {
         if (!visibleDates.length) {
