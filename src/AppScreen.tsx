@@ -1,59 +1,67 @@
-import {AppBar, Avatar, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Container, createStyles, IconButton, makeStyles, Toolbar, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
-import {CalendarToday, ExitToApp, MenuBook} from "@material-ui/icons";
+import {CalendarToday, MenuBook} from "@material-ui/icons";
 import React, {useContext} from "react";
 import {AuthContext} from "./services/Auth";
-import firebase from "firebase";
-import {signOut} from "./services/Firebase";
 import {TagIcon} from "./tags/TagIcon";
+import {CurrentUserLink} from "./common/CurrentUserLink";
 
-const CurrentUserLink = ({user} : {user: firebase.User}) => {
-    return <>
-        <Avatar src={user.photoURL || undefined} alt={user.email || undefined} />
-    </>
-}
+const useStyles = makeStyles(createStyles({
+    root: {
+        "& svg": {
+            fill: "white"
+        }
+    },
+
+    toolbar: {
+        display: "flex",
+    },
+
+    title: {
+        fontSize: "24px",
+        "flexGrow": 1,
+        textAlign: "left",
+    },
+
+    currentUserLink: {
+        marginLeft: ".5em",
+        cursor: "pointer",
+    }
+}))
 
 export const AppScreen = ({title, children} : { title?: string, children: React.ReactNode }) => {
     const currentUser = useContext(AuthContext);
-
-    function doSignOut() {
-        if (window.confirm("Log out?")) {
-            signOut();
-        }
-    }
+    const classes = useStyles()
 
     return <>
-        <AppBar position="static" className="app-bar">
-            <Toolbar className="toolbar">
-                {currentUser && <CurrentUserLink user={currentUser}/>}
-
-                <Typography variant="h1">
+        <AppBar position="static" className={classes.root}>
+            <Toolbar className={classes.toolbar}>
+                    <Typography variant="h1" className={classes.title}>
                     {title ?? "And the dinner is..."}
                 </Typography>
 
-                <Link to="/">
-                    <IconButton edge="end">
-                        <CalendarToday/>
-                    </IconButton>
-                </Link>
+                {currentUser && <>
+                    <Link to="/">
+                        <IconButton edge="end">
+                            <CalendarToday/>
+                        </IconButton>
+                    </Link>
 
-                <Link to="/dishes">
-                    <IconButton edge="end">
-                        <MenuBook/>
-                    </IconButton>
-                </Link>
+                    <Link to="/dishes">
+                        <IconButton edge="end">
+                            <MenuBook/>
+                        </IconButton>
+                    </Link>
 
-                <Link to="/tags">
-                    <IconButton edge="end">
-                        <TagIcon />
-                    </IconButton>
-                </Link>
+                    <Link to="/tags">
+                        <IconButton edge="end">
+                            <TagIcon />
+                        </IconButton>
+                    </Link>
 
-                {currentUser &&
-                    <IconButton edge="end" onClick={doSignOut}>
-                        <ExitToApp />
-                    </IconButton>
-                }
+                    <CurrentUserLink user={currentUser} className={classes.currentUserLink} />
+                </>}
+
 
             </Toolbar>
         </AppBar>
