@@ -3,6 +3,8 @@ import firebase from "firebase";
 
 export const db = firebaseApp.firestore()
 
+export const firestoreTimestamp = firebase.firestore.Timestamp
+
 type User = firebase.User;
 
 export abstract class Db {

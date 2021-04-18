@@ -1,7 +1,7 @@
 import {Dish} from "./Dish";
 import firebase from "firebase";
 import {sortBy} from "sort-by-typescript";
-import {Db,} from "../services/Db";
+import {Db, firestoreTimestamp,} from "../services/Db";
 import {useContext, useMemo} from "react";
 import {AuthContext} from "../services/Auth";
 
@@ -17,6 +17,8 @@ export class DishDb extends Db {
     }
 
     add(dish: Dish) {
+        dish.addedAt = firestoreTimestamp.now()
+
         return this.dishesCollection().add(dish)
     }
 

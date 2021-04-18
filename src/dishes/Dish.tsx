@@ -1,4 +1,6 @@
 import {Tag} from "../tags/Tag";
+import firebase from "firebase";
+import Timestamp = firebase.firestore.Timestamp;
 
 export interface Dish {
 
@@ -13,4 +15,6 @@ export interface Dish {
     imageRefs: Array<{path: string, url: string}>
 
     tags: Array<Tag>
+
+    addedAt: Timestamp
 }
