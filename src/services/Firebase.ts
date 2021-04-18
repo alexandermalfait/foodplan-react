@@ -36,5 +36,6 @@ export const uploadFiles = async (files: FileList, path: string) => {
 
         return { path: result.ref.fullPath, url: await result.ref.getDownloadURL() as string }
     }))
-
 }
+
+export const downloadFile = async(path: string) => firebaseApp.storage().ref(path).getDownloadURL()
