@@ -4,6 +4,7 @@ import moment from "moment";
 import {AppScreen} from "../AppScreen";
 import {DishList} from "../dishes/DishList";
 import {Dish} from "../dishes/Dish";
+import {useQueryClient} from "react-query";
 
 export default function PlanDish() {
     const { date:dateParam } = useParams<{date: string}>();
@@ -13,10 +14,14 @@ export default function PlanDish() {
 
     const history = useHistory()
 
-    function planDish(dish:Dish) {
-        plannerDb.add(date.toDate(), dish).then(() => {
-            history.push("/") // todo: correct week
-        })
+    const queryClient = useQueryClient()
+
+    async function planDish(dish:Dish) {
+        await plannerDb.add(date.toDate(), dish)
+
+        await queryClient.invalidateQueries("plannings")
+
+        history.push("/") // todo: correct week
     }
 
     return <>
