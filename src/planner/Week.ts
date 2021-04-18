@@ -1,4 +1,4 @@
-import {Moment} from "moment";
+import moment, {Moment} from "moment";
 
 export class Week {
     private monday: moment.Moment;
@@ -19,5 +19,13 @@ export class Week {
         }
 
         return dates;
+    }
+
+    add(delta: number) {
+        return new Week(this.monday.add(delta, 'week'));
+    }
+
+    static currentWeek() {
+        return new Week(moment().startOf('isoWeek'))
     }
 }

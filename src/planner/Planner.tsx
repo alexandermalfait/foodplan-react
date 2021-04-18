@@ -1,60 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {Box, Button, ButtonGroup} from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import {PlannerDate} from "./PlannerDate";
-import moment, {Moment} from "moment";
-import {SkipNext, SkipPrevious, Today} from "@material-ui/icons";
+import {Moment} from "moment";
 import {Week} from "./Week";
 import {AppScreen} from "../AppScreen";
 import {usePlannerDb} from "./PlannerDb";
 import {Planning} from "./Planning";
 import {useMutation, useQuery, useQueryClient} from "react-query";
-
-function thisMonday() {
-    return moment().startOf('isoWeek');
-}
-
-function WeekControls(props: { onPreviousWeek: () => void, onToday: () => void, onNextWeek: () => void }) {
-    return <Box display="flex" justifyContent="center">
-        <ButtonGroup variant="contained">
-            <Button onClick={props.onPreviousWeek}>
-                <SkipPrevious/>
-                Prev week
-            </Button>
-
-            <Button onClick={props.onToday}>
-                <Today/>
-                Today
-            </Button>
-
-            <Button onClick={props.onNextWeek}>
-                Next week
-                <SkipNext/>
-            </Button>
-        </ButtonGroup>
-
-    </Box>;
-}
+import {WeekControl} from "./WeekControl";
 
 export function Planner() {
-    const [currentMonday, setCurrentMonday] = useState(thisMonday())
+    const [visibleWeek, setVisibleWeek] = useState(Week.currentWeek())
 
     const [visibleDates, setVisibleDates] = useState<Moment[]>([])
+
+    useEffect(() => setVisibleDates(visibleWeek.getDates()), [visibleWeek])
 
     const db = usePlannerDb()
 
     const queryClient = useQueryClient()
-
-    function setToday() {
-        setCurrentMonday(moment().startOf('isoWeek'))
-    }
-
-    function shiftWeek(delta: number) {
-        setCurrentMonday(currentMonday.clone().add(delta, 'week'));
-    }
-
-    useEffect(() => {
-        setVisibleDates(new Week(currentMonday).getDates())
-    }, [currentMonday])
 
     const queryKey = ["plannings", ...visibleDates.map(d => d.toDate().getTime())]
 
@@ -83,7 +47,7 @@ export function Planner() {
 
     return <>
         <AppScreen>
-            <WeekControls onPreviousWeek={() => shiftWeek(-1)} onToday={setToday} onNextWeek={() => shiftWeek(1)}/>
+            <WeekControl week={visibleWeek} updateWeek={setVisibleWeek}/>
 
             <Box py={1}>
                 {visibleDates.map(day => {
@@ -98,7 +62,7 @@ export function Planner() {
                 })}
             </Box>
 
-            <WeekControls onPreviousWeek={() => shiftWeek(-1)} onToday={setToday} onNextWeek={() => shiftWeek(1)}/>
+            <WeekControl week={visibleWeek} updateWeek={setVisibleWeek}/>
         </AppScreen>
 
     </>
