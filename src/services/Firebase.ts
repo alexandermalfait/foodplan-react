@@ -24,7 +24,29 @@ export const signInWithGoogle = () => {
 }
 
 export const signOut = () => {
-    auth.signOut()
+    return auth.signOut()
+}
+
+export const signInAsUser = async (email: string):Promise<boolean> => {
+    const result = await firebaseFunctions.httpsCallable("getLoginToken")({targetEmail: email})
+
+    const loginToken = result.data as string
+
+    console.log("got login token", loginToken)
+
+    if (loginToken == null) {
+        return false
+    }
+
+    const userCredential = await auth.signInWithCustomToken(loginToken);
+
+    const user = userCredential.user;
+
+    if (user) {
+        console.log("logged in as ", user.email, user.uid);
+    }
+
+    return true
 }
 
 export const uploadFiles = async (files: FileList, path: string) => {
@@ -39,3 +61,6 @@ export const uploadFiles = async (files: FileList, path: string) => {
 }
 
 export const downloadFile = async(path: string) => firebaseApp.storage().ref(path).getDownloadURL()
+
+export const firebaseFunctions = firebaseApp.functions()
+firebaseFunctions.useEmulator("localhost", 5001)

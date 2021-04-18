@@ -5,7 +5,9 @@ import * as imageThumbnail from "image-thumbnail";
 
 type FileRef = { path: string, url: string };
 
-admin.initializeApp();
+if (admin.apps.length === 0) {
+    admin.initializeApp();
+}
 
 const dishDocument = functions
     .region("europe-west1")

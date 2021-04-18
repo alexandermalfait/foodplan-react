@@ -1,11 +1,27 @@
 import firebase from "firebase";
-import {signOut} from "../services/Firebase";
+import {signInAsUser, signOut} from "../services/Firebase";
 import React from "react";
 import {Avatar, Menu, MenuItem} from "@material-ui/core";
 
 export const CurrentUserLink = ({user, className}: { user: firebase.User, className: string }) => {
     function doSignOut() {
         signOut();
+    }
+
+    const doLoginAsX = async () => {
+        const email = prompt("Target login?")
+
+        if (! email) {
+            return
+        }
+
+        const loggedIn = await signInAsUser(email);
+
+        if (! loggedIn) {
+            alert("Login failed!")
+        }
+
+        setAnchorEl(null);
     }
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -30,10 +46,11 @@ export const CurrentUserLink = ({user, className}: { user: firebase.User, classN
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleClose}
-            anchorOrigin={{vertical: "bottom", horizontal: "center"}}
             transformOrigin={{vertical: "top", horizontal: "center"}}
         >
             <MenuItem onClick={doSignOut}>Log Out</MenuItem>
+
+            <MenuItem onClick={doLoginAsX}>Impersonate...</MenuItem>
         </Menu>
     </>
 }
