@@ -67,8 +67,8 @@ function TagList({ tags, onDeleteTag } : { tags: Array<Tag>, onDeleteTag: (tag:T
     return <>
         <List>
             {Array.from(tags).map(tag =>
-                <>
-                    <ListItem key={tag.id}>
+                <React.Fragment key={tag.id}>
+                    <ListItem>
                         <ListItemIcon>
                             <TagIcon tag={tag}/>
                         </ListItemIcon>
@@ -79,7 +79,7 @@ function TagList({ tags, onDeleteTag } : { tags: Array<Tag>, onDeleteTag: (tag:T
                     </ListItem>
 
                     <Divider/>
-                </>
+                </React.Fragment>
             )}
         </List>
     </>;

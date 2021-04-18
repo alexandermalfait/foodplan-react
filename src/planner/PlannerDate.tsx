@@ -83,7 +83,7 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
 
             <div className={classes.dateContents}>
                 <div className={classes.planning}>
-                    {plannings.map((planning, index) => <>
+                    {plannings.map((planning, index) => <React.Fragment key={planning.id}>
                         {index > 0 && <Divider />}
 
                         <DishCard
@@ -94,7 +94,7 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
                                 <HighlightOff className={classes.deleteIcon} />
                             }
                         />
-                    </>
+                    </React.Fragment>
                     )}
                 </div>
 
