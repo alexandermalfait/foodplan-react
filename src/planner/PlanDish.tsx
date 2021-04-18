@@ -21,7 +21,7 @@ export default function PlanDish() {
 
         await queryClient.invalidateQueries("plannings")
 
-        history.push("/") // todo: correct week
+        history.push(`/planner/${date.format(DATE_FORMAT)}`)
     }
 
     return <>

@@ -20,6 +20,8 @@ function App() {
                     <Switch>
                         <PrivateRoute exact path="/" component={Planner}/>
 
+                        <PrivateRoute exact path="/planner/:date" component={Planner}/>
+
                         <PrivateRoute path="/planner/:date/select" component={PlanDish}/>
 
                         <PrivateRoute path="/dishes" component={Dishes}/>

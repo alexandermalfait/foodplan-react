@@ -28,4 +28,8 @@ export class Week {
     static currentWeek() {
         return new Week(moment().startOf('isoWeek'))
     }
+
+    static fromDate(date: Date|Moment) {
+        return new Week(moment(date).startOf('isoWeek'))
+    }
 }

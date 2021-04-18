@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from "react";
 import {Box} from "@material-ui/core";
 import {PlannerDate} from "./PlannerDate";
-import {Moment} from "moment";
+import moment, {Moment} from "moment";
 import {Week} from "./Week";
 import {AppScreen} from "../AppScreen";
-import {usePlannerDb} from "./PlannerDb";
+import {DATE_FORMAT, usePlannerDb} from "./PlannerDb";
 import {Planning} from "./Planning";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {WeekControl} from "./WeekControl";
+import {useParams} from "react-router-dom";
 
 export function Planner() {
-    const [visibleWeek, setVisibleWeek] = useState(Week.currentWeek())
+    const params = useParams<{date: string}>();
+
+    const [visibleWeek, setVisibleWeek] = useState(
+        params.date ? Week.fromDate(moment(params.date, DATE_FORMAT)) : Week.currentWeek()
+    )
 
     const [visibleDates, setVisibleDates] = useState<Moment[]>([])
 
