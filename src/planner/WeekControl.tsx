@@ -14,7 +14,7 @@ export function WeekControl({week, updateWeek}: { week: Week, updateWeek: ((week
     }
 
     return <Box display="flex" justifyContent="center">
-        <ButtonGroup variant="outlined" size="small">
+        <ButtonGroup variant="text" size="small">
             <Button onClick={() => shiftWeek(-1)}>
                 <SkipPrevious/>
                 Prev week
