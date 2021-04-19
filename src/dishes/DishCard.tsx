@@ -50,7 +50,7 @@ const useStyles = makeStyles(createStyles({
     } ,
 
     image: {
-        flex: "0 0 30%",
+        flex: "0 0 20%",
         minHeight: "80px",
         display: "flex",
         backgroundSize: "cover",
@@ -81,13 +81,19 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
         window.open(imageUrl, "_blank", 'noopener,noreferrer');
     }
 
-    return <Paper className={`${classes.root} ${className || ""}`}>
+    const borderColor = ( dish.tags.length > 0 && dish.tags[0].color ) || undefined;
+
+    return <Paper
+        className={`${classes.root} ${className || ""}`}
+        variant={"outlined"}
+        style={{ borderColor: borderColor }}
+    >
         <div className={classes.content}>
-            <strong className={classes.title} title={dish.name} onClick={onClick}>
+            <span className={classes.title} title={dish.name} onClick={onClick}>
                 {dish.name}
 
                 {titleControls}
-            </strong>
+            </span>
 
             {(dish.tags || dish.url) &&
                 <div className={classes.controls}>

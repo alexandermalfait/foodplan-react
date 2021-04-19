@@ -1,4 +1,4 @@
-import {Card, createStyles, Divider, IconButton, makeStyles} from "@material-ui/core";
+import {createStyles, IconButton, makeStyles} from "@material-ui/core";
 import moment, {Moment} from "moment";
 import {HighlightOff, MenuBook} from "@material-ui/icons";
 import React from "react";
@@ -9,29 +9,51 @@ import {DishCard} from "../dishes/DishCard";
 
 const useStyles = makeStyles(createStyles({
     root: {
-        display: "flex",
+        //display: "flex",
         minHeight: "50px",
-        margin: "1em 0"
+        margin: ".5em 0",
+        padding: ".5em",
+        borderBottom: "1px dotted silver",
+
+        "&:last-child": {
+            borderBottom: "none",
+        }
     } ,
 
+    today: {
+        background: "#fafff7",
+    } ,
+
+    top: {
+        display: "flex"
+    } ,
+
+    dateIcon: {
+        display: "inline-block",
+    } ,
     date: {
-        padding: ".5em",
-        width: "15%",
-        background: "#d5eff6",
-        textAlign: "center",
+        flexGrow: 1,
+        color: "#310f57",
+
+        "& > h2, & > h3": {
+            display: "inline-block",
+            marginLeft: ".5em",
+            margin: "0",
+        },
     } ,
 
     dayOfWeek: {
         fontWeight: "bold",
+        fontSize: "1.2rem"
     },
 
     fullDate: {
-        fontSize: ".7em"
+       fontSize: ".9rem",
+        fontWeight: "normal",
     } ,
 
     dateContents: {
         display: "flex",
-        width: "85%"
     },
 
     planning: {
@@ -40,7 +62,7 @@ const useStyles = makeStyles(createStyles({
 
     dishCard: {
         margin: ".5em",
-        boxShadow: "none",
+        background: "linear-gradient(90deg, rgba(255,255,250,1) 0%, rgba(255,255,255,1) 100%);",
     },
 
     deleteIcon: {
@@ -71,21 +93,29 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
     }
 
     return <>
-        <Card className={classes.root} raised={isToday}>
-            <div className={classes.date}>
-                <div className={classes.dayOfWeek}>
-                    {day.format("ddd")}
+        <div className={`${classes.root} ${isToday ? classes.today : ""}`}>
+            <div className={classes.top}>
+                <div className={classes.date}>
+                    {/*<CalendarToday htmlColor={dayColors[day.isoWeekday() - 1]} className={classes.dateIcon} />*/}
+
+                    <h2 className={classes.dayOfWeek}>
+                        {day.format("dddd")}
+                    </h2>
+                    <h3 className={classes.fullDate}>
+                        {day.format("D MMMM")}
+                    </h3>
                 </div>
-                <div className={classes.fullDate}>
-                    {day.format("D MMM")}
+
+                <div className={classes.buttons}>
+                    <IconButton onClick={() => selectDish()} size={"small"}>
+                        <MenuBook/>
+                    </IconButton>
                 </div>
             </div>
 
             <div className={classes.dateContents}>
                 <div className={classes.planning}>
-                    {plannings.map((planning, index) => <React.Fragment key={planning.id}>
-                        {index > 0 && <Divider />}
-
+                    {plannings.map((planning) => <React.Fragment key={planning.id}>
                         <DishCard
                             dish={planning.dish}
                             className={classes.dishCard}
@@ -97,13 +127,7 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
                     </React.Fragment>
                     )}
                 </div>
-
-                <div className={classes.buttons}>
-                    <IconButton onClick={() => selectDish()}>
-                        <MenuBook/>
-                    </IconButton>
-                </div>
             </div>
-        </Card>
+        </div>
     </>;
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Box} from "@material-ui/core";
+import {createStyles, makeStyles, Paper} from "@material-ui/core";
 import {PlannerDate} from "./PlannerDate";
 import moment, {Moment} from "moment";
 import {Week} from "./Week";
@@ -9,6 +9,12 @@ import {Planning} from "./Planning";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {WeekControl} from "./WeekControl";
 import {useParams} from "react-router-dom";
+
+const useStyles = makeStyles(createStyles({
+    planner: {
+        margin: "1em 0"
+    }
+}))
 
 export function Planner() {
     const params = useParams<{date: string}>();
@@ -50,11 +56,13 @@ export function Planner() {
         return db.list(firstDate.toDate(), lastDate.toDate())
     }, {staleTime: 60 * 1000})
 
+    const classes = useStyles()
+
     return <>
         <AppScreen>
             <WeekControl week={visibleWeek} updateWeek={setVisibleWeek}/>
 
-            <Box py={1}>
+            <Paper className={classes.planner}>
                 {visibleDates.map(day => {
                     const planningsForDate = plannings ? plannings.filter(p => day.isSame(p.date, "day")) : []
 
@@ -65,7 +73,7 @@ export function Planner() {
                         deletePlanning={deletePlanning}
                     />;
                 })}
-            </Box>
+            </Paper>
 
             <WeekControl week={visibleWeek} updateWeek={setVisibleWeek}/>
         </AppScreen>
