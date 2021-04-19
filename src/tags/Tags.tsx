@@ -34,7 +34,6 @@ function NewTagForm({tagSaved}: { tagSaved: (tag: Tag) => void }) {
                         fullWidth
                         inputRef={register({required: true})}
                         required
-                        autoFocus
                     />
                 </Grid>
 
