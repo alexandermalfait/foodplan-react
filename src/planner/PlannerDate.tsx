@@ -39,12 +39,13 @@ const useStyles = makeStyles(createStyles({
             display: "inline-block",
             marginLeft: ".5em",
             margin: "0",
+            fontFamily: "'Poppins', Roboto"
         },
     } ,
 
     dayOfWeek: {
         fontWeight: "bold",
-        fontSize: "1.2rem"
+        fontSize: "1.3rem"
     },
 
     fullDate: {
