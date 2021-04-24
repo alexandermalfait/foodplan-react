@@ -12,6 +12,8 @@ export interface Dish {
 
     imageRefs: Array<{path: string, url: string}>
 
+    imageThumbnailRefs: Array<{path: string, url: string}>
+
     tags: Array<Tag>
 
     addedAt: Timestamp

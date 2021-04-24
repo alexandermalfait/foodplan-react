@@ -73,7 +73,7 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
 
     const { data:imageUrl } = useQuery<string|null>(
         [ "dishImageUrl", dish.id ],
-        () => dish.imageRefs && downloadFile(dish.imageRefs[0].path),
+        () => dish.imageThumbnailRefs && downloadFile(dish.imageThumbnailRefs[0].path),
         { staleTime: Infinity }
     )
 

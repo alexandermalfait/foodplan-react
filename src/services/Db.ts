@@ -3,7 +3,11 @@ import firebase from "firebase";
 
 export const db = firebaseApp.firestore()
 
-export const firestoreTimestamp = firebase.firestore.Timestamp
+if (process.env.REACT_APP_USE_EMULATOR === "true") {
+    db.useEmulator("localhost", 5050)
+}
+
+export const firestoreTimestamp = firebase.firestore.Timestamp;
 
 type User = firebase.User;
 
