@@ -2,7 +2,7 @@ import {useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
 import {CircularProgress, Container, createStyles, Fab, Grid, makeStyles} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DishCard} from "./DishCard";
 import {Alert} from "@material-ui/lab";
 import {TagSelector} from "../tags/TagSelector";
@@ -27,12 +27,16 @@ const useStyles = makeStyles(createStyles({
     }
 }))
 
+let lastFilteredTags = Array<Tag>()
+
 export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
     const history = useHistory()
 
     const classes = useStyles()
 
-    const [ filteredTags, setFilteredTags ] = useState<Array<Tag>>([])
+    const [ filteredTags, setFilteredTags ] = useState(lastFilteredTags)
+
+    useEffect(() => { lastFilteredTags = filteredTags }, [ filteredTags])
 
     const db = useDishDb()
 
