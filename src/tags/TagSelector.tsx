@@ -1,13 +1,10 @@
-import {TagsDb} from "./TagsDb";
-import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../services/Auth";
+import {useTagsDb} from "./TagsDb";
+import {useEffect, useState} from "react";
 import {Tag} from "./Tag";
 import {CircularProgress, FormControlLabel, Switch} from "@material-ui/core";
 import {useQuery} from "react-query";
 
 export function TagSelector( { onChange, initialTags } : { onChange: (tags:Array<Tag>) => void, initialTags: Array<Tag>}) {
-
-    const currentUser = useContext(AuthContext)
 
     const [selectedTags, setSelectedTags] = useState<Array<Tag>>(initialTags)
 
@@ -25,7 +22,9 @@ export function TagSelector( { onChange, initialTags } : { onChange: (tags:Array
         onChange(newSelectedTags)
     }
 
-    const { isLoading, data:tags } = useQuery('tags', () => new TagsDb(currentUser!).list())
+    const tagsDb = useTagsDb()
+
+    const { isLoading, data:tags } = useQuery('tags', () => tagsDb.list())
 
     useEffect(() => setSelectedTags(initialTags), [ tags, initialTags ])
 

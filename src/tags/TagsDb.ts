@@ -2,6 +2,15 @@ import firebase from "firebase";
 import {Tag} from "./Tag";
 import {sortBy} from "sort-by-typescript";
 import {Db} from "../services/Db";
+import {useContext, useMemo} from "react";
+import {AuthContext} from "../services/Auth";
+
+export function useTagsDb() {
+    const currentUser = useContext(AuthContext);
+
+    return useMemo(() => new TagsDb(currentUser!), [currentUser])
+}
+
 
 export class TagsDb extends Db {
     private tagsCollection() {
