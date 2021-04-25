@@ -100,7 +100,7 @@ async function addDishPictureToDish(dishPicture, dish) {
 
     console.log(`Uploading ${filename}`)
 
-    const destination = `images/${UID}/${dish.id}/${filename}`;
+    const destination = `images/${UID}/${Date.now()}/${filename}`;
     await app.storage().bucket().upload(tmpFilePath, {destination: destination});
 
     const savedUrl = (await app.storage().bucket().file(destination).getSignedUrl({

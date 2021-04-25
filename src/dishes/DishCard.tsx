@@ -69,8 +69,8 @@ interface Props {
 export function DishCard({dish, onClick, className, titleControls}: Props) {
     const classes = useStyles()
 
-    const thumbnailUrl = dish.imageThumbnailRefs && dish.imageThumbnailRefs[0].url
-    const imageUrl = dish.imageRefs && dish.imageRefs[0].url
+    const thumbnailUrl = dish.imageThumbnailRefs && dish.imageThumbnailRefs[0]?.url
+    const imageUrl = dish.imageRefs && dish.imageRefs[0]?.url
 
     function openImage(imageUrl: string) {
         window.open(imageUrl, "_blank", 'noopener,noreferrer');
