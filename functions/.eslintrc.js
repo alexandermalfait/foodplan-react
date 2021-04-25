@@ -29,6 +29,7 @@ module.exports = {
         "indent": ["error", 4],
         "max-len": ["error", 120],
         "require-jsdoc": ["off"],
+        "arrow-parens": ["off"],
     },
 
 };
