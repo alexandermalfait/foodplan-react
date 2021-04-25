@@ -5,7 +5,10 @@ import * as imageThumbnail from "image-thumbnail";
 
 admin.initializeApp();
 
-const dishDocument = functions.firestore.document("users/{uid}/dishes/{dishId}");
+const dishDocument = functions
+    .region("europe-west1")
+    .firestore
+    .document("users/{uid}/dishes/{dishId}");
 
 // noinspection JSUnusedGlobalSymbols
 export const updateThumbnailsForDish = dishDocument.onWrite(async (change) => {
