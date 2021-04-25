@@ -9,6 +9,7 @@ import {TagSelector} from "../tags/TagSelector";
 import {Tag} from "../tags/Tag";
 import {useDishDb} from "./DishDb";
 import {useQuery} from "react-query";
+import {orderBy} from "natural-orderby";
 
 const useStyles = makeStyles(createStyles({
     fab: {
@@ -60,9 +61,8 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
         return true
     }
 
-    const visibleDishes = dishes!.filter(dish =>
-        dishMatchesFilters(dish)
-    )
+    const filteredDishes = dishes!.filter(dishMatchesFilters);
+    const visibleDishes = orderBy(filteredDishes, [ d => d.name ])
 
     return <>
         <Fab
