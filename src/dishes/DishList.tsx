@@ -50,8 +50,18 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
         return <CircularProgress />
     }
 
+    function dishMatchesFilters(dish: Dish) {
+        if (filteredTags) {
+            if (!filteredTags.every(filteredTag => dish.tags.some(dishTag => dishTag.id === filteredTag.id))) {
+                return false
+            }
+        }
+
+        return true
+    }
+
     const visibleDishes = dishes!.filter(dish =>
-        !filteredTags || filteredTags.every(filteredTag => dish.tags.some(dishTag => dishTag.id === filteredTag.id))
+        dishMatchesFilters(dish)
     )
 
     return <>
