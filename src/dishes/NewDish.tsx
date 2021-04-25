@@ -19,7 +19,7 @@ export function NewDish() {
         const {selectedFiles, ...dish} = dishValue
 
         if (selectedFiles) {
-            dish.imageRefs = await uploadFiles(selectedFiles, `images/${currentUser!.uid}`);
+            dish.imageRefs = await uploadFiles(selectedFiles, `images/${currentUser!.uid}/${Date.now()}`);
         }
 
         db.add(dish).then(() => history.push("/dishes"))

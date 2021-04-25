@@ -28,7 +28,7 @@ export function EditDish() {
         dishToUpdate.tags = dishValue.tags
 
         if (dishValue.selectedFiles) {
-            dishToUpdate.imageRefs = await uploadFiles(dishValue.selectedFiles, `images/${currentUser!.uid}`);
+            dishToUpdate.imageRefs = await uploadFiles(dishValue.selectedFiles, `images/${currentUser!.uid}/${Date.now()}`);
         }
 
         db.update(dishToUpdate).then(() => history.push("/dishes"))
