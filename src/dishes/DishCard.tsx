@@ -3,8 +3,6 @@ import {CardMedia, createStyles, makeStyles, Paper} from "@material-ui/core";
 import {TagIcon} from "../tags/TagIcon";
 import {Http} from "@material-ui/icons";
 import React from "react";
-import {downloadFile} from "../services/Firebase";
-import {useQuery} from "react-query";
 
 const useStyles = makeStyles(createStyles({
     root: {
@@ -71,11 +69,8 @@ interface Props {
 export function DishCard({dish, onClick, className, titleControls}: Props) {
     const classes = useStyles()
 
-    const { data:imageUrl } = useQuery<string|null>(
-        [ "dishImageUrl", dish.id ],
-        () => dish.imageThumbnailRefs && downloadFile(dish.imageThumbnailRefs[0].path),
-        { staleTime: Infinity }
-    )
+    const thumbnailUrl = dish.imageThumbnailRefs && dish.imageThumbnailRefs[0].url
+    const imageUrl = dish.imageRefs && dish.imageRefs[0].url
 
     function openImage(imageUrl: string) {
         window.open(imageUrl, "_blank", 'noopener,noreferrer');
@@ -113,6 +108,6 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
 
         </div>
 
-        {imageUrl && <CardMedia image={imageUrl!} className={classes.image} onClick={() => openImage(imageUrl!)} />}
+        {imageUrl && <CardMedia image={thumbnailUrl || imageUrl!} className={classes.image} onClick={() => openImage(imageUrl!)} />}
     </Paper>;
 }
