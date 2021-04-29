@@ -6,11 +6,12 @@ import {
     createStyles,
     Fab,
     Grid,
+    IconButton,
     InputAdornment,
     makeStyles,
     TextField
 } from "@material-ui/core";
-import {Add, SearchOutlined} from "@material-ui/icons";
+import {Add, Clear, SearchOutlined} from "@material-ui/icons";
 import React, {useEffect, useState} from "react";
 import {DishCard} from "./DishCard";
 import {Alert} from "@material-ui/lab";
@@ -101,7 +102,16 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
 
         <Container className={classes.textSearch}>
             <TextField
-                InputProps={{ startAdornment: <InputAdornment position="start"><SearchOutlined /></InputAdornment> }}
+                InputProps={{
+                    startAdornment:
+                        <InputAdornment position="start"><SearchOutlined /></InputAdornment>,
+                    endAdornment: filteredText &&
+                        <InputAdornment position={"end"}>
+                            <IconButton onClick={() => setFilteredText("")} size="small">
+                                <Clear />
+                            </IconButton>
+                        </InputAdornment>
+                }}
                 value={filteredText}
                 onChange={e => setFilteredText(e.currentTarget.value)}
                 placeholder={"Search.."}
