@@ -1,7 +1,16 @@
 import {useHistory} from "react-router-dom";
 import {Dish} from "./Dish";
-import {CircularProgress, Container, createStyles, Fab, Grid, makeStyles} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
+import {
+    CircularProgress,
+    Container,
+    createStyles,
+    Fab,
+    Grid,
+    InputAdornment,
+    makeStyles,
+    TextField
+} from "@material-ui/core";
+import {Add, SearchOutlined} from "@material-ui/icons";
 import React, {useEffect, useState} from "react";
 import {DishCard} from "./DishCard";
 import {Alert} from "@material-ui/lab";
@@ -23,6 +32,11 @@ const useStyles = makeStyles(createStyles({
         marginBottom: "1em",
     } ,
 
+    textSearch: {
+        textAlign: "center",
+        marginBottom: "1em",
+    } ,
+
     dishCard: {
         height: "100%",
     }
@@ -36,6 +50,8 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
     const classes = useStyles()
 
     const [ filteredTags, setFilteredTags ] = useState(lastFilteredTags)
+
+    const [ filteredText, setFilteredText ] = useState("")
 
     useEffect(() => { lastFilteredTags = filteredTags }, [ filteredTags])
 
@@ -58,7 +74,13 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
             }
         }
 
-        return true
+        if (filteredText) {
+            if(!dish.name.toLowerCase().includes(filteredText.toLowerCase())) {
+                return false
+            }
+        }
+
+        return true;
     }
 
     const filteredDishes = dishes!.filter(dishMatchesFilters);
@@ -75,6 +97,15 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
 
         <Container className={classes.tagSelector}>
             <TagSelector initialTags={filteredTags} onChange={setFilteredTags} />
+        </Container>
+
+        <Container className={classes.textSearch}>
+            <TextField
+                InputProps={{ startAdornment: <InputAdornment position="start"><SearchOutlined /></InputAdornment> }}
+                value={filteredText}
+                onChange={e => setFilteredText(e.currentTarget.value)}
+                placeholder={"Search.."}
+            />
         </Container>
 
         <Grid container spacing={3}>
