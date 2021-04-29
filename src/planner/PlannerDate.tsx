@@ -32,16 +32,20 @@ const useStyles = makeStyles(createStyles({
         display: "inline-block",
     } ,
     date: {
-        flexGrow: 1,
+        marginRight: "auto",
         color: "#310f57",
 
         "& > h2, & > h3": {
             display: "inline-block",
             marginLeft: ".5em",
             margin: "0",
-            fontFamily: "'Poppins', Roboto"
+            fontFamily: "'Poppins', Roboto",
         },
     } ,
+
+    todayDate: {
+        borderBottom: "1px dashed green",
+    },
 
     dayOfWeek: {
         fontWeight: "bold",
@@ -96,10 +100,10 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
     return <>
         <div className={`${classes.root} ${isToday ? classes.today : ""}`}>
             <div className={classes.top}>
-                <div className={classes.date}>
+                <div className={`${classes.date}`}>
                     {/*<CalendarToday htmlColor={dayColors[day.isoWeekday() - 1]} className={classes.dateIcon} />*/}
 
-                    <h2 className={classes.dayOfWeek}>
+                    <h2 className={`${classes.dayOfWeek} ${isToday ? classes.todayDate : ""}`}>
                         {day.format("dddd")}
                     </h2>
                     <h3 className={classes.fullDate}>
