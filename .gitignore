@@ -26,4 +26,4 @@ yarn-error.log*
 /.env
 
 serviceAccount.json
-/src/scripts/importDishes/*.json
+/scripts/**/*.json
