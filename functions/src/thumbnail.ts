@@ -44,16 +44,16 @@ function getThumbnailPath(imageRef: FileRef) {
     return parts.join("/");
 }
 
-async function createThumbnail(imageRef: FileRef):Promise<FileRef> {
+async function createThumbnail(imageRef: FileRef, width = 200): Promise<FileRef> {
     const bucket = admin.storage().bucket();
 
     console.log(`Downloading original from ${imageRef.path}`);
 
     const [originalImageData] = await bucket.file(imageRef.path).download();
 
-    console.log("Resizing to 100 width");
+    console.log(`Resizing ${imageRef.path} to ${width} width`);
 
-    const thumbnailBuffer = await imageThumbnail(originalImageData, {width: 100, responseType: "buffer"});
+    const thumbnailBuffer = await imageThumbnail(originalImageData, {width: width, responseType: "buffer"});
 
     const thumbnailPath = getThumbnailPath(imageRef);
 
@@ -64,6 +64,7 @@ async function createThumbnail(imageRef: FileRef):Promise<FileRef> {
     const thumbnailUrl = (await bucket.file(thumbnailPath).getSignedUrl({
         action: "read",
         expires: "01-01-2200",
+        contentType: "",
     }))[0];
 
     return {path: thumbnailPath, url: thumbnailUrl};
