@@ -48,5 +48,9 @@ export class PlannerDb extends Db {
     delete(planning: Planning) {
         return this.planningCollection().doc(planning.id).delete()
     }
+
+    async addReminder(planning: Planning, time: moment.Moment) {
+        return this.planningCollection().doc(planning.id).update("reminder", time.toDate())
+    }
 }
 

@@ -21,4 +21,8 @@ export class UsersDb extends Db {
             }
         })
     }
+
+    updateMessagingToken(token: string) {
+        this.userDocument().update("messagingToken", token)
+    }
 }

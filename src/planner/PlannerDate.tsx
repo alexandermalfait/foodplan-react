@@ -6,6 +6,7 @@ import {useHistory} from "react-router-dom";
 import {DATE_FORMAT} from "./PlannerDb";
 import {Planning} from "./Planning";
 import {DishCard} from "../dishes/DishCard";
+import {PlanningNotificationControl} from "./PlanningNotificationControl";
 
 const useStyles = makeStyles(createStyles({
     root: {
@@ -101,8 +102,6 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
         <div className={`${classes.root} ${isToday ? classes.today : ""}`}>
             <div className={classes.top}>
                 <div className={`${classes.date}`}>
-                    {/*<CalendarToday htmlColor={dayColors[day.isoWeekday() - 1]} className={classes.dateIcon} />*/}
-
                     <h2 className={`${classes.dayOfWeek} ${isToday ? classes.todayDate : ""}`}>
                         {day.format("dddd")}
                     </h2>
@@ -127,6 +126,9 @@ export function PlannerDate({ day, plannings, deletePlanning } : Props) {
                             onClick={() => deletePlanning(planning)}
                             titleControls={
                                 <HighlightOff className={classes.deleteIcon} />
+                            }
+                            extraControls={
+                                <PlanningNotificationControl planning={planning} />
                             }
                         />
                     </React.Fragment>

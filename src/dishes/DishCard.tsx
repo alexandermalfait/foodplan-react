@@ -63,10 +63,12 @@ interface Props {
 
     onClick?: () => void
 
-    titleControls?: React.ReactNode
+    titleControls?: React.ReactNode,
+
+    extraControls?: React.ReactNode,
 }
 
-export function DishCard({dish, onClick, className, titleControls}: Props) {
+export function DishCard({dish, onClick, className, titleControls, extraControls}: Props) {
     const classes = useStyles()
 
     const thumbnailUrl = dish.imageThumbnailRefs && dish.imageThumbnailRefs[0]?.url
@@ -103,6 +105,8 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
                             <Http />
                         </a>
                     }
+
+                    {extraControls}
                 </div>
             }
 

@@ -27,6 +27,8 @@ export const signOut = () => {
     auth.signOut()
 }
 
+export const getFireBaseMessageToken = () => firebaseApp.messaging().getToken({vapidKey: 'BIBmtoplo4ir3J7Qr4DFsJVlyuFc5qs9wNm7TPrusyQBIN2GYlwO297j1B3TsfKhW-HJJpeRkOa-oOFnIaaJjqA'})
+
 export const uploadFiles = async (files: FileList, path: string) => {
     return await Promise.all(Array.from(files).map(async file => {
         const result = await firebaseApp
