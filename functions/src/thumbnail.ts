@@ -59,13 +59,11 @@ async function createThumbnail(imageRef: FileRef, width = 200): Promise<FileRef>
 
     console.log(`Uploading thumbnail to ${thumbnailPath}`);
 
-    await bucket.file(thumbnailPath).save(thumbnailBuffer);
+    const bucketFile = bucket.file(thumbnailPath);
+    await bucketFile.save(thumbnailBuffer, {public: true});
+    const metaData = await bucketFile.getMetadata();
 
-    const thumbnailUrl = (await bucket.file(thumbnailPath).getSignedUrl({
-        action: "read",
-        expires: "01-01-2200",
-        contentType: "",
-    }))[0];
+    const thumbnailUrl = metaData[0].mediaLink;
 
     return {path: thumbnailPath, url: thumbnailUrl};
 }
