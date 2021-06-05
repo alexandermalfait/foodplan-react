@@ -1,5 +1,5 @@
 import {Dish} from "./Dish";
-import {CardMedia, createStyles, makeStyles, Paper} from "@material-ui/core";
+import {createStyles, makeStyles, Paper} from "@material-ui/core";
 import {TagIcon} from "../tags/TagIcon";
 import {Http} from "@material-ui/icons";
 import React from "react";
@@ -50,9 +50,14 @@ const useStyles = makeStyles(createStyles({
     image: {
         flex: "0 0 20%",
         minHeight: "80px",
+        cursor: "pointer",
         display: "flex",
-        backgroundSize: "cover",
-        cursor: "pointer"
+
+        "& img": {
+            objectFit: "cover",
+            width: "100%",
+            height: "100%",
+        }
     },
 }))
 
@@ -71,10 +76,6 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
 
     const thumbnailUrl = dish.imageThumbnailRefs && dish.imageThumbnailRefs[0]?.url
     const imageUrl = dish.imageRefs && dish.imageRefs[0]?.url
-
-    function openImage(imageUrl: string) {
-        window.open(imageUrl, "_blank", 'noopener,noreferrer');
-    }
 
     const borderColor = ( dish.tags.length > 0 && dish.tags[0].color ) || undefined;
 
@@ -108,6 +109,10 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
 
         </div>
 
-        {imageUrl && <CardMedia image={thumbnailUrl || imageUrl!} className={classes.image} onClick={() => openImage(imageUrl!)} />}
+        {imageUrl &&
+            <a className={classes.image} href={imageUrl!} target="_blank" rel="noreferrer">
+                <img src={thumbnailUrl || imageUrl!} alt={dish.name} loading="lazy" />
+            </a>
+        }
     </Paper>;
 }
