@@ -9,6 +9,7 @@ import {useDishDb} from "./DishDb";
 import {useQuery} from "react-query";
 import {orderBy} from "natural-orderby";
 import {DishListFilter, DishListFilterState} from "./DishListFilter";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const useStyles = makeStyles(createStyles({
     fab: {
@@ -23,6 +24,8 @@ const useStyles = makeStyles(createStyles({
 }))
 
 
+const SCROLLED_DISHES_BATCH_COUNT = 20;
+
 export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
     const history = useHistory()
 
@@ -31,6 +34,8 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
     const db = useDishDb()
 
     const [ filterState, setFilterState ] = useState<DishListFilterState>(new DishListFilterState())
+
+    const [ scrolledDishesCount, setScrolledDishesCount ] = useState(SCROLLED_DISHES_BATCH_COUNT)
 
     function createDish() {
         history.push(`/dishes/new`);
@@ -44,6 +49,11 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
 
     const filteredDishes = dishes!.filter(d => filterState.matches(d));
     const visibleDishes = orderBy(filteredDishes, [ d => d.name ])
+    const scrolledDishes = visibleDishes.slice(0, scrolledDishesCount)
+
+    function loadNextBatch() {
+        setScrolledDishesCount(scrolledDishesCount + SCROLLED_DISHES_BATCH_COUNT);
+    }
 
     return <>
         <Fab
@@ -56,19 +66,28 @@ export function DishList({ onClick } : { onClick: (dish:Dish) => void}) {
 
         <DishListFilter filtersUpdated={setFilterState} />
 
-        <Grid container spacing={3}>
-            {visibleDishes.length ?
-                visibleDishes.map(dish =>
-                    <Grid item xs={12} md={6} lg={4} key={dish.id}>
-                        <DishCard dish={dish} onClick={() => onClick(dish)} className={classes.dishCard} />
-                    </Grid>
-                )
-                :
-                <Alert severity="info" style={{width: "100%"}}>
-                    {filterState.filled ? "No food found for this search" : "Add some food to get started!" }
-                </Alert>
-            }
-        </Grid>
+        {!visibleDishes.length &&
+            <Alert severity="info" style={{width: "100%"}}>
+                {filterState.filled ? "No food found for this search" : "Add some food to get started!" }
+            </Alert>
+        }
+
+        {visibleDishes.length &&
+            <InfiniteScroll
+                next={() => loadNextBatch()}
+                hasMore={scrolledDishesCount < visibleDishes.length}
+                loader={"..."}
+                dataLength={scrolledDishes.length}
+            >
+                <Grid container spacing={3}>
+                    {scrolledDishes.map(dish =>
+                        <Grid item xs={12} md={6} lg={4} key={dish.id}>
+                            <DishCard dish={dish} onClick={() => onClick(dish)} className={classes.dishCard}/>
+                        </Grid>
+                    )}
+                </Grid>
+            </InfiniteScroll>
+        }
     </>;
 }
 
