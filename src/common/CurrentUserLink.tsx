@@ -2,8 +2,11 @@ import firebase from "firebase";
 import {signInAsUser, signOut} from "../services/Firebase";
 import React from "react";
 import {Avatar, Menu, MenuItem} from "@material-ui/core";
+import {useQueryClient} from "react-query";
 
 export const CurrentUserLink = ({user, className}: { user: firebase.User, className: string }) => {
+    const queryClient = useQueryClient()
+
     async function doSignOut() {
         await signOut();
     }
@@ -13,6 +16,9 @@ export const CurrentUserLink = ({user, className}: { user: firebase.User, classN
 
         if (loggedIn) {
             localStorage.setItem("lastImpersonatedEmail", email)
+
+            // reload planning and such
+            await queryClient.invalidateQueries()
         } else {
             alert("Login failed!")
         }
