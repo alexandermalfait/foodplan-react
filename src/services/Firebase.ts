@@ -62,7 +62,7 @@ export const uploadFiles = async (files: FileList, path: string) => {
 
 export const downloadFile = async(path: string) => firebaseApp.storage().ref(path).getDownloadURL()
 
-export const firebaseFunctions = firebaseApp.functions()
+export const firebaseFunctions = firebaseApp.functions("europe-west1")
 
 if(process.env['REACT_APP_USE_EMULATOR'] === "true") {
     firebaseFunctions.useEmulator("localhost", 5001)
