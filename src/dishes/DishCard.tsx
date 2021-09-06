@@ -50,6 +50,7 @@ const useStyles = makeStyles(createStyles({
     image: {
         flex: "0 0 20%",
         minHeight: "80px",
+        maxHeight: "110px",
         cursor: "pointer",
         display: "flex",
 
