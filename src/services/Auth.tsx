@@ -13,7 +13,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
             setCurrentUser(user)
 
             if (user) {
-                new UsersDb(user).saveProfile();
+                new UsersDb(user).saveProfile().catch(reason => alert(reason))
             }
         })
     }, [])

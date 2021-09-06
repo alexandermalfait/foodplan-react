@@ -10,10 +10,10 @@ export function useUsersDb() {
 
 export class UsersDb extends Db {
 
-    saveProfile() {
+    async saveProfile() {
         const user = this.user;
 
-        this.userDocument().set({
+        await this.userDocument().update({
             profile: {
                 email: user.email,
                 photoUrl: user.photoURL,
