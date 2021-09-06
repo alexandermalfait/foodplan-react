@@ -6,7 +6,7 @@ import {AuthContext} from "./services/Auth";
 import {TagIcon} from "./tags/TagIcon";
 import {CurrentUserLink} from "./common/CurrentUserLink";
 
-const useStyles = makeStyles(createStyles({
+const useStyles = makeStyles(theme => createStyles({
     root: {
         "& svg": {
             fill: "white"
@@ -21,6 +21,9 @@ const useStyles = makeStyles(createStyles({
         fontSize: "24px",
         "flexGrow": 1,
         textAlign: "left",
+        [ theme.breakpoints.down("xs")]: {
+            fontSize: "18px"
+        }
     },
 
     currentUserLink: {
