@@ -4,27 +4,35 @@ import React from "react";
 import {Avatar, Menu, MenuItem} from "@material-ui/core";
 
 export const CurrentUserLink = ({user, className}: { user: firebase.User, className: string }) => {
-    function doSignOut() {
-        signOut();
+    async function doSignOut() {
+        await signOut();
     }
 
-    const doLoginAsX = async () => {
-        const email = prompt("Target login?")
-
-        if (! email) {
-            return
-        }
-
+    async function doLoginAsEmail(email: string) {
         const loggedIn = await signInAsUser(email);
 
-        if (! loggedIn) {
+        if (loggedIn) {
+            localStorage.setItem("lastImpersonatedEmail", email)
+        } else {
             alert("Login failed!")
         }
 
         setAnchorEl(null);
     }
 
+    const doLoginAsOtherUser = async () => {
+        const email = prompt("Target login?")
+
+        if (! email) {
+            return
+        }
+
+        await doLoginAsEmail(email);
+    }
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const lastImpersonatedEmail = localStorage.getItem("lastImpersonatedEmail")
 
     const handleClick = (event: React.MouseEvent<any>) => {
         setAnchorEl(event.currentTarget);
@@ -50,7 +58,13 @@ export const CurrentUserLink = ({user, className}: { user: firebase.User, classN
         >
             <MenuItem onClick={doSignOut}>Log Out</MenuItem>
 
-            <MenuItem onClick={doLoginAsX}>Impersonate...</MenuItem>
+            <MenuItem onClick={doLoginAsOtherUser}>Impersonate...</MenuItem>
+
+            {lastImpersonatedEmail &&
+                <MenuItem
+                    onClick={() => doLoginAsEmail(lastImpersonatedEmail)}
+                >Impersonate {lastImpersonatedEmail}</MenuItem>
+            }
         </Menu>
     </>
 }
