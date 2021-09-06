@@ -1,11 +1,14 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import {FUNCTIONS_REGION} from "./index";
 
 if (admin.apps.length === 0) {
     admin.initializeApp();
 }
 
-export const getLoginToken = functions.https.onCall(async (data, context) => {
+const https = functions.region(FUNCTIONS_REGION).https;
+
+export const getLoginToken = https.onCall(async (data, context) => {
     const targetEmail = data.targetEmail as string;
     const currentUserIdToken = context.auth?.uid;
 

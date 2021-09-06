@@ -2,6 +2,7 @@ import * as functions from "firebase-functions";
 
 import * as admin from "firebase-admin";
 import * as imageThumbnail from "image-thumbnail";
+import {FUNCTIONS_REGION} from "./index";
 
 type FileRef = { path: string, url: string };
 
@@ -10,7 +11,7 @@ if (admin.apps.length === 0) {
 }
 
 const dishDocument = functions
-    .region("europe-west1")
+    .region(FUNCTIONS_REGION)
     .firestore
     .document("users/{uid}/dishes/{dishId}");
 
