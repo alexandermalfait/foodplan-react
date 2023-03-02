@@ -1,5 +1,6 @@
 import {Assignment} from "@material-ui/icons";
-import {Button, Tooltip} from "@material-ui/core";
+import {ClickAwayListener, IconButton, Tooltip} from "@material-ui/core";
+import {useState} from "react";
 
 export function DishNotes(props: { notes: string }) {
     function tooltipContents(notes: string) {
@@ -8,11 +9,32 @@ export function DishNotes(props: { notes: string }) {
         </>;
     }
 
+    const [open, setOpen] = useState(false);
+
+    const handleTooltipClose = () => {
+        setOpen(false);
+    };
+
+    const handleTooltipOpen = () => {
+        setOpen(true);
+    };
+
     return <>
-        <Tooltip title={tooltipContents(props.notes)}>
-            <Button>
-                <Assignment/>
-            </Button>
-        </Tooltip>
+        <ClickAwayListener onClickAway={handleTooltipClose}>
+            <Tooltip
+                PopperProps={{
+                    disablePortal: true,
+                }}
+                onClose={handleTooltipClose}
+                open={open}
+                disableFocusListener
+                disableTouchListener
+                title={tooltipContents(props.notes)}
+            >
+                <IconButton onClick={handleTooltipOpen}>
+                    <Assignment />
+                </IconButton>
+            </Tooltip>
+        </ClickAwayListener>
     </>;
 }
