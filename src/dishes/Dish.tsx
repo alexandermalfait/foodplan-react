@@ -10,6 +10,8 @@ export interface Dish {
 
     url?: string
 
+    notes?: string
+
     imageRefs: Array<{path: string, url: string}>
 
     imageThumbnailRefs: Array<{path: string, url: string}>

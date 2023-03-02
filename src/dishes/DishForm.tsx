@@ -62,6 +62,17 @@ export function DishForm({onSubmit, currentValue, onDeleteDish, isSaving}: Props
                 </Grid>
 
                 <Grid item xs={12}>
+                    <TextField
+                        label="Dish Notes"
+                        fullWidth
+                        inputRef={register}
+                        name="notes"
+                        multiline
+                        rows={3}
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
                     <Controller
                         control={control}
                         name="tags"
