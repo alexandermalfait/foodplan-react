@@ -3,6 +3,7 @@ import {createStyles, makeStyles, Paper} from "@material-ui/core";
 import {TagIcon} from "../tags/TagIcon";
 import {Http} from "@material-ui/icons";
 import React from "react";
+import {DishNotes} from "./DishNotes";
 
 const useStyles = makeStyles(createStyles({
     root: {
@@ -41,6 +42,8 @@ const useStyles = makeStyles(createStyles({
     link: {
         color: "gray",
         marginLeft: ".5em",
+        display: "inline-block",
+        cursor: "pointer",
         "& svg": {
             fontSize: "1.7em",
             verticalAlign: "middle",
@@ -72,6 +75,10 @@ interface Props {
     titleControls?: React.ReactNode
 }
 
+function needControls(dish: Dish):boolean {
+    return !!(dish.tags || dish.url || dish.notes);
+}
+
 export function DishCard({dish, onClick, className, titleControls}: Props) {
     const classes = useStyles()
 
@@ -92,7 +99,7 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
                 {titleControls}
             </span>
 
-            {(dish.tags || dish.url) &&
+            {needControls(dish) &&
                 <div className={classes.controls}>
                     {dish.tags && dish.tags.map(tag =>
                         <div className={classes.tag} key={tag.id}>
@@ -104,6 +111,10 @@ export function DishCard({dish, onClick, className, titleControls}: Props) {
                         <a href={dish.url} target="_blank" rel="noreferrer" className={classes.link}>
                             <Http />
                         </a>
+                    }
+
+                    {dish.notes &&
+                        <DishNotes notes={dish.notes} />
                     }
                 </div>
             }
